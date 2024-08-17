@@ -16,8 +16,8 @@ public class LineRendererUtility : MonoBehaviour
         lineRenderer.positionCount = 0;
 
         // Calculate stage durations
-        float stage1Duration = RocketLaunch.CalculateStageDuration(1);
-        float stage2Duration = RocketLaunch.CalculateStageDuration(2);
+        float stage1Duration = RocketLaunch.CalculateStageDuration(RocketLaunch.stage1);
+        float stage2Duration = RocketLaunch.CalculateStageDuration(RocketLaunch.stage2);
         float totalDuration = stage1Duration + stage2Duration;
 
         Vector2 position = Vector2.zero;
@@ -38,13 +38,13 @@ public class LineRendererUtility : MonoBehaviour
             // Determine stage and calculate direction and speed
             if (elapsedTime <= stage1Duration)
             {
-                launchDirection = RocketLaunch.GetFlightDirection(1);
-                speed = RocketLaunch.CalculateSpeed(1);
+                launchDirection = RocketLaunch.GetFlightDirection(RocketLaunch.stage1);
+                speed = RocketLaunch.CalculateSpeed(RocketLaunch.stage1);
             }
             else if (elapsedTime > stage1Duration && elapsedTime <= stage1Duration + stage2Duration)
             {
-                launchDirection = RocketLaunch.GetFlightDirection(2);
-                speed = RocketLaunch.CalculateSpeed(2);
+                launchDirection = RocketLaunch.GetFlightDirection(RocketLaunch.stage2);
+                speed = RocketLaunch.CalculateSpeed(RocketLaunch.stage2);
             }
             else
             {
