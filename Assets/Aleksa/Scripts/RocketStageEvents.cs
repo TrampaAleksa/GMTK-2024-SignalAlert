@@ -4,7 +4,7 @@ using UnityEngine;
 public class RocketStageEvents : MonoBehaviour
 {
     public RocketLaunch rocketLaunch;
-    private Vector2 position;
+    public Vector2 position;
 
     private void Awake()
     {

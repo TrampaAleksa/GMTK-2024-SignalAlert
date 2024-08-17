@@ -4,60 +4,33 @@ using System.Collections.Generic;
 public class LineRendererUtility : MonoBehaviour
 {
     public RocketLaunch RocketLaunch;
-    public LineRenderer lineRenderer;  // Reference to the LineRenderer component
-    public int numberOfPoints = 20;    // Default number of points for the path
+    public LineRenderer lineRenderer; 
+    public int numberOfPoints = 20;
 
     private List<Vector3> positions = new List<Vector3>();
 
     [ContextMenu("Simulate Flight")]
     public void SimulateFlight()
     {
+        RocketLaunch.Init();
+        
         positions.Clear();
         lineRenderer.positionCount = 0;
-
-        // Calculate stage durations
-        float stage1Duration = RocketLaunch.CalculateStageDuration(RocketLaunch.stage1);
-        float stage2Duration = RocketLaunch.CalculateStageDuration(RocketLaunch.stage2);
-        float totalDuration = stage1Duration + stage2Duration;
-
-        Vector2 position = Vector2.zero;
-        Vector2 launchDirection = Vector2.zero;
-        float speed = 0f;
-        
         positions.Add(Vector2.zero);
         
+        RocketLaunch.rocketStateMachine.LaunchStateMachine();
+        
+        RocketLaunch.stage1.OnStageUpdate += (StageModel stage) => positions.Add(RocketLaunch.rocketStageEvents.position);
+        RocketLaunch.stage2.OnStageUpdate += (StageModel stage) => positions.Add(RocketLaunch.rocketStageEvents.position);
+        RocketLaunch.stage3.OnStageUpdate += (StageModel stage) => positions.Add(RocketLaunch.rocketStageEvents.position);
+        
         // Simulated time increment (equivalent to Time.deltaTime)
-        float timeIncrement = totalDuration / (numberOfPoints - 1);
-        float elapsedTime = 0f;
+        float timeIncrement = RocketLaunch.GetTotalDuration() / (numberOfPoints - 1);
         
         // Simulate over the number of points
         for (int i = 0; i < numberOfPoints; i++)
         {
-            elapsedTime += timeIncrement;
-
-            // Determine stage and calculate direction and speed
-            if (elapsedTime <= stage1Duration)
-            {
-                launchDirection = RocketLaunch.GetFlightDirection(RocketLaunch.stage1);
-                speed = RocketLaunch.CalculateSpeed(RocketLaunch.stage1);
-            }
-            else if (elapsedTime > stage1Duration && elapsedTime <= stage1Duration + stage2Duration)
-            {
-                launchDirection = RocketLaunch.GetFlightDirection(RocketLaunch.stage2);
-                speed = RocketLaunch.CalculateSpeed(RocketLaunch.stage2);
-            }
-            else
-            {
-                // End of simulation, no further movement
-                break;
-            }
-
-            // Calculate position
-            var previousPosition = new Vector2(positions[^1].x, positions[^1].y);
-            position = previousPosition + launchDirection * speed * timeIncrement;
-
-            // Store position
-            positions.Add(new Vector3(position.x, position.y, 0));
+            RocketLaunch.rocketStateMachine.UpdateTime(timeIncrement); // handles stage start, update and end events
         }
 
         // Update the LineRenderer with the simulated positions

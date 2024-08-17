@@ -20,11 +20,13 @@ public class RocketLaunch : MonoBehaviour
 
     private void Awake()
     {
+        Init();
+    }
+
+    public void Init()
+    {
         _initialPosition = transform.position;
-        rocketStateMachine = GetComponent<RocketStateMachine>();
         rocketStateMachine.SetupStateMachine(this);
-        
-        rocketStageEvents = GetComponent<RocketStageEvents>();
 
         stage1.OnStageStart = rocketStageEvents.Stage1Start;
         stage2.OnStageStart = rocketStageEvents.Stage2Start;
@@ -35,15 +37,15 @@ public class RocketLaunch : MonoBehaviour
         stage1.OnStageEnd = rocketStageEvents.Stage1End;
         stage2.OnStageEnd = rocketStageEvents.Stage2End;
         stage3.OnStageEnd = rocketStageEvents.Stage3End;
+        
+        stage1.angleAtStageStart = startAngle;
+        stage2.angleAtStageStart = startAngle;
+        stage3.angleAtStageStart = startAngle;
     }
 
     public void Launch()
     {
         transform.position = _initialPosition;
-
-        stage1.angleAtStageStart = startAngle;
-        stage2.angleAtStageStart = startAngle;
-        stage3.angleAtStageStart = startAngle;
 
         rocketStateMachine.LaunchStateMachine();
     }
@@ -70,5 +72,10 @@ public class RocketLaunch : MonoBehaviour
     {
         Vector2 flightDirection = stage.GetFlightDirection();
         return flightDirection;
+    }
+
+    public float GetTotalDuration()
+    {
+        return CalculateStageDuration(stage1) + CalculateStageDuration(stage2) + CalculateStageDuration(stage3);
     }
 }
