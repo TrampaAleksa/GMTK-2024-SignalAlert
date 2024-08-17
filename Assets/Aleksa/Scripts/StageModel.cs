@@ -16,6 +16,10 @@ public class StageModel
     [HideInInspector]
     public float angleAtStageStart = 45f;  // Reference angle in degrees
     
+    public Action OnStageStart;
+    public Action OnStageEnd;
+    public Action OnStageUpdate;
+    
     
     public float GetStageDuration()
     {
@@ -39,6 +43,8 @@ public class StageModel
 
     public static StageModel GetDefaultStage()
     {
+        Debug.LogError("Using default stage model");
+        
         return new StageModel
         {
             referenceStageMass = 1000f,
