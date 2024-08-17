@@ -14,7 +14,6 @@ public class RocketLaunch : MonoBehaviour
     private float timeSinceLaunch;
     private float stage1Duration;
     private float stage2Duration;
-    private float speed;
     private Vector2 position;
     private Vector2 initialPosition = Vector2.zero;
     private bool isLaunched = false;
@@ -26,6 +25,8 @@ public class RocketLaunch : MonoBehaviour
 
     void Update()
     {
+        if (!isLaunched)
+            return;
         MoveRocket();
     }
 
@@ -47,11 +48,11 @@ public class RocketLaunch : MonoBehaviour
 
     public void MoveRocket()
     {
-        if (!isLaunched)
-            return;
-        
         timeSinceLaunch += Time.deltaTime;
+        
         Vector2 stageLaunchDirection;
+        float speed;
+        
         // Calculate velocity based on current stage
         if (timeSinceLaunch <= stage1Duration)
         {
@@ -67,7 +68,9 @@ public class RocketLaunch : MonoBehaviour
         else
         {
             // TODO - start lowering the angle by adding gravity downwards
+            // temp for stage 3 taking values from stage 2
             stageLaunchDirection = GetFlightDirection(stage2);
+            speed = CalculateSpeed(stage2);
         }
 
         position += stageLaunchDirection * (speed * Time.deltaTime);
