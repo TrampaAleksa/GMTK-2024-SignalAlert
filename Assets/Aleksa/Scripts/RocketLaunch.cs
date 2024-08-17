@@ -35,7 +35,7 @@ public class RocketLaunch : MonoBehaviour
         initialPosition = transform.position;
     }
 
-    void FixedUpdate()
+    void Update()
     {
         MoveRocket();
     }
@@ -61,7 +61,7 @@ public class RocketLaunch : MonoBehaviour
         if (!isLaunched)
             return;
         
-        timeSinceLaunch += Time.fixedDeltaTime;
+        timeSinceLaunch += Time.deltaTime;
 
         // Calculate velocity based on current stage
         if (timeSinceLaunch <= stage1Duration)
@@ -80,7 +80,7 @@ public class RocketLaunch : MonoBehaviour
             // TODO - start lowering the angle by adding gravity downwards
         }
 
-        position += launchDirection * (speed * Time.fixedDeltaTime);
+        position += launchDirection * (speed * Time.deltaTime);
         transform.position = position;
     }
 
@@ -89,6 +89,17 @@ public class RocketLaunch : MonoBehaviour
         return (referenceStageDuration * referenceStageMass) / (mass * engines);
     }
     
+    public float CalculateStageDuration(int stageNumber)
+    {
+        return stageNumber switch
+        {
+            1 => CalculateStageDuration(M1, E1),
+            2 => CalculateStageDuration(M2, E2),
+            _ => referenceStageDuration
+        };
+    }
+    
+    
     public float CalculateSpeed(int engines, float stageMass)
     {
         float rocketSpeed = engineForce * engines / stageMass;
@@ -96,11 +107,33 @@ public class RocketLaunch : MonoBehaviour
         return rocketSpeed;
     }
     
+    public float CalculateSpeed(int stageNumber)
+    {
+        return stageNumber switch
+        {
+            1 => CalculateSpeed(E1, M1),
+            2 => CalculateSpeed(E2, M2),
+            _ => CalculateSpeed(1, referenceStageMass)
+        };
+    }
+    
     //TODO - Add reference angle for stage 1 and 2 instead of one reference angle
     public float CalculateAdjustedAngle(float givenMass)
     {
         float adjustedAngle = referenceAngle * (referenceStageMass / givenMass);
         return adjustedAngle;
+    }
+
+    public Vector2 GetFlightDirection(float mass) => new Vector2(Mathf.Cos(CalculateAdjustedAngle(mass) * Mathf.Deg2Rad), Mathf.Sin(CalculateAdjustedAngle(mass) * Mathf.Deg2Rad)).normalized;
+
+    public Vector2 GetFlightDirection(int stageNumber)
+    {
+        return stageNumber switch
+        {
+            1 => GetFlightDirection(M1),
+            2 => GetFlightDirection(M2),
+            _ => GetFlightDirection(referenceStageMass)
+        };
     }
 
     public float CalculateRemainingFuel(float initialFuelMass, float stageDuration, float elapsedTime)
@@ -111,6 +144,14 @@ public class RocketLaunch : MonoBehaviour
 
         return remainingFuel;
     }
-    
-    public Vector2 GetFlightDirection(float mass) => new Vector2(Mathf.Cos(CalculateAdjustedAngle(mass) * Mathf.Deg2Rad), Mathf.Sin(CalculateAdjustedAngle(mass) * Mathf.Deg2Rad)).normalized;
+
+    public int GetStagePhase()
+    {
+        if (timeSinceLaunch <= stage1Duration)
+            return 1;
+        else if (timeSinceLaunch > stage1Duration && timeSinceLaunch <= stage1Duration + stage2Duration)
+            return 2;
+        else
+            return 3;
+    }
 }
