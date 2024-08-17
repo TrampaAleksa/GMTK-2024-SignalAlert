@@ -20,12 +20,12 @@ public class RocketLaunch : MonoBehaviour
 
     private void Awake()
     {
+        _initialPosition = transform.position;
         Init();
     }
 
     public void Init()
     {
-        _initialPosition = transform.position;
         rocketStateMachine.SetupStateMachine(this);
 
         stage1.OnStageStart = rocketStageEvents.Stage1Start;
@@ -46,7 +46,6 @@ public class RocketLaunch : MonoBehaviour
     public void Launch()
     {
         transform.position = _initialPosition;
-
         rocketStateMachine.LaunchStateMachine();
     }
 
@@ -55,8 +54,6 @@ public class RocketLaunch : MonoBehaviour
         rocketStateMachine.UpdateTime(Time.deltaTime); // handles stage start, update and end events
     }
 
-    
-    
     
     public float CalculateStageDuration(StageModel stage)
     {
