@@ -1941,7 +1941,7 @@ MonoBehaviour:
     angleAtStageStart: 45
   maxSpeed: 100
   startAngle: 45
-  gravityStrength: 0
+  gravityStrength: 2
 --- !u!114 &1661198085
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1969,7 +1969,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rocketLaunch: {fileID: 1661198084}
   referenceStage3Speed: 5.5
-  referenceTime: 5
+  referenceTime: 18
+  gravityAccelerationTime: 5
 --- !u!1 &1805101361
 GameObject:
   m_ObjectHideFlags: 0

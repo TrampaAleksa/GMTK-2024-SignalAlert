@@ -45,49 +45,53 @@ public class RocketStageEvents : MonoBehaviour
     }
     public void Stage2End(StageModel stage)
     {
-        currentStage3Speed = rocketLaunch.CalculateSpeed(stage);
+        _currentStage3Speed = rocketLaunch.CalculateSpeed(stage);
     }
 
 
-    
-    private float currentStage3Speed;
-    private float thrustDecayRate;
-    
-    public void Stage3Start(StageModel stage)
-    {
-        float relativeMassFactor = stage.mass / stage.referenceStageMass; 
-        thrustDecayRate = (stage.referenceStageMass / currentStage3Speed) * relativeMassFactor;
-        
-        Debug.Log("Thrust decay rate: " + thrustDecayRate);
-        Debug.Log("Current stage 3 speed: " + currentStage3Speed);
-    }
-    public void Stage3Update(StageModel stage)
-    {
-        DecreaseSpeed(stage);
-        Debug.Log("Current stage 3 speed: " + currentStage3Speed);
-        Vector2 stageLaunchDirection = rocketLaunch.GetFlightDirection(stage);
-        
-        // TODO -- Additive gravity factor for more realistic descent
-        position += stageLaunchDirection * (currentStage3Speed * Time.deltaTime) + Vector2.down * (rocketLaunch.gravityStrength * Time.deltaTime);
-        transform.position = position;
-    }
-    public void Stage3End(StageModel stage)
-    { 
-
-    }
     
     // The speed which stage 3 should initially have if expected to reach 0 in reference time
     public float referenceStage3Speed = 5.5f;  
     // The time in seconds for referenceSpeed to reach 0
-    public float referenceTime = 5f;    
+    public float referenceTime = 5f;   
+    private float _currentStage3Speed;
+ 
+    public float gravityAccelerationTime = 5f;
+    private float _currentGravity;  
+    private float _elapsedTimeGravity;  
+    
+    public void Stage3Start(StageModel stage)
+    {
+        _elapsedTimeGravity = 0f;
+        _currentGravity = 0f;
+    }
+    public void Stage3Update(StageModel stage)
+    {
+        DecreaseSpeed(stage);
+        Vector2 stageLaunchDirection = rocketLaunch.GetFlightDirection(stage);
+        
+        _elapsedTimeGravity += Time.deltaTime;
+        _currentGravity = Mathf.Lerp(0, rocketLaunch.gravityStrength, _elapsedTimeGravity / gravityAccelerationTime);
+        
+        position += stageLaunchDirection * (_currentStage3Speed * Time.deltaTime); 
+        position += Vector2.down * (_currentGravity * Time.deltaTime);
+        
+        transform.position = position;
+    }
+    public void Stage3End(StageModel stage)
+    { 
+    }
+    
+
+
     private void DecreaseSpeed(StageModel stage)
     {
         float referenceDecrementPerSecond = referenceStage3Speed / referenceTime;
         float adjustedDecrementPerSecond = referenceDecrementPerSecond * (stage.referenceStageMass / stage.mass);
 
         float speedDecrementPerFrame = adjustedDecrementPerSecond * Time.deltaTime;
-
-        currentStage3Speed -= speedDecrementPerFrame;
-        currentStage3Speed = Mathf.Max(currentStage3Speed, 0f);
+        
+        _currentStage3Speed -= speedDecrementPerFrame;
+        _currentStage3Speed = Mathf.Max(_currentStage3Speed, 0f);
     }
 }
