@@ -84,12 +84,12 @@ public class RocketLaunch : MonoBehaviour
         transform.position = position;
     }
 
-    float CalculateStageDuration(float mass, int engines)
+    public float CalculateStageDuration(float mass, int engines)
     {
         return (referenceStageDuration * referenceStageMass) / (mass * engines);
     }
-
-    float CalculateSpeed(int engines, float stageMass)
+    
+    public float CalculateSpeed(int engines, float stageMass)
     {
         float rocketSpeed = engineForce * engines / stageMass;
         rocketSpeed = Mathf.Min(rocketSpeed, maxSpeed);
@@ -103,7 +103,7 @@ public class RocketLaunch : MonoBehaviour
         return adjustedAngle;
     }
 
-    float CalculateRemainingFuel(float initialFuelMass, float stageDuration, float elapsedTime)
+    public float CalculateRemainingFuel(float initialFuelMass, float stageDuration, float elapsedTime)
     {
         elapsedTime = Mathf.Clamp(elapsedTime, 0, stageDuration);
 
@@ -112,5 +112,5 @@ public class RocketLaunch : MonoBehaviour
         return remainingFuel;
     }
     
-    Vector2 GetFlightDirection(float mass) => new Vector2(Mathf.Cos(CalculateAdjustedAngle(mass) * Mathf.Deg2Rad), Mathf.Sin(CalculateAdjustedAngle(mass) * Mathf.Deg2Rad)).normalized;
+    public Vector2 GetFlightDirection(float mass) => new Vector2(Mathf.Cos(CalculateAdjustedAngle(mass) * Mathf.Deg2Rad), Mathf.Sin(CalculateAdjustedAngle(mass) * Mathf.Deg2Rad)).normalized;
 }
