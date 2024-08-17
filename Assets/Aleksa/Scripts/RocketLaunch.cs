@@ -5,15 +5,13 @@ using UnityEngine.Serialization;
 
 public class RocketLaunch : MonoBehaviour
 {
+    public RocketStateMachine rocketStateMachine;
     public StageModel stage1;
     public StageModel stage2;
     public StageModel stage3;
     public float maxSpeed = 100f;
     public float startAngle = 45f;  // Reference angle in degrees
     
-    private float timeSinceLaunch;
-    private float stage1Duration;
-    private float stage2Duration;
     private Vector2 position;
     private Vector2 initialPosition = Vector2.zero;
     private bool isLaunched = false;
@@ -21,62 +19,49 @@ public class RocketLaunch : MonoBehaviour
     private void Awake()
     {
         initialPosition = transform.position;
-    }
+        rocketStateMachine = GetComponent<RocketStateMachine>();
+        rocketStateMachine.SetupStateMachine(this);
 
-    void Update()
-    {
-        if (!isLaunched)
-            return;
-        MoveRocket();
+        stage1.OnStageUpdate = Stage1Update;
+        stage2.OnStageUpdate = Stage2Update;
     }
 
     public void Launch()
     {
-        timeSinceLaunch = 0f;
-        
         position = initialPosition;
         transform.position = initialPosition;
 
         stage1.angleAtStageStart = startAngle;
         stage2.angleAtStageStart = startAngle;
 
-        stage1Duration = CalculateStageDuration(stage1);
-        stage2Duration = CalculateStageDuration(stage2);
-
+        rocketStateMachine.LaunchStateMachine();
         isLaunched = true;
     }
 
-    public void MoveRocket()
+    void Update()
     {
-        timeSinceLaunch += Time.deltaTime;
+        if (!isLaunched)
+            return;
         
-        Vector2 stageLaunchDirection;
-        float speed;
-        
-        // Calculate velocity based on current stage
-        if (timeSinceLaunch <= stage1Duration)
-        {
-            stageLaunchDirection = GetFlightDirection(stage1);
-            speed = CalculateSpeed(stage1);
-        }
-        else if (timeSinceLaunch > stage1Duration && timeSinceLaunch <= stage1Duration + stage2Duration)
-        {
-            stageLaunchDirection = GetFlightDirection(stage2);
-            speed = CalculateSpeed(stage2);
-        }
-        // Stage 3 - No engines, maintain velocity
-        else
-        {
-            // TODO - start lowering the angle by adding gravity downwards
-            // temp for stage 3 taking values from stage 2
-            stageLaunchDirection = GetFlightDirection(stage2);
-            speed = CalculateSpeed(stage2);
-        }
+        rocketStateMachine.UpdateTime(Time.deltaTime); // handles stage start, update and end events
+    }
 
+    public void Stage1Update(StageModel stage)
+    {
+        Vector2 stageLaunchDirection = GetFlightDirection(stage);
+        float speed = CalculateSpeed(stage);
+        
         position += stageLaunchDirection * (speed * Time.deltaTime);
         transform.position = position;
     }
-    
+    public void Stage2Update(StageModel stage)
+    {
+        Vector2 stageLaunchDirection = GetFlightDirection(stage);
+        float speed = CalculateSpeed(stage);
+        
+        position += stageLaunchDirection * (speed * Time.deltaTime);
+        transform.position = position;
+    }
     public float CalculateStageDuration(StageModel stage)
     {
         float stageDuration = stage.GetStageDuration();
@@ -94,4 +79,6 @@ public class RocketLaunch : MonoBehaviour
         Vector2 flightDirection = stage.GetFlightDirection();
         return flightDirection;
     }
+
+    public StageModel CurrentlyActiveStage => rocketStateMachine.CurrentActiveStage;
 }

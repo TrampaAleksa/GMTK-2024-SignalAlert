@@ -16,9 +16,9 @@ public class StageModel
     [HideInInspector]
     public float angleAtStageStart = 45f;  // Reference angle in degrees
     
-    public Action OnStageStart;
-    public Action OnStageEnd;
-    public Action OnStageUpdate;
+    public Action<StageModel> OnStageStart;
+    public Action<StageModel> OnStageEnd;
+    public Action<StageModel> OnStageUpdate;
     
     
     public float GetStageDuration()

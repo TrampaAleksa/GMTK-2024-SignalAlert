@@ -11,7 +11,7 @@ public class RocketStateMachine : MonoBehaviour
     private StageModel _stage2;
     private StageModel _stage3;
 
-    public void LaunchStateMachine(RocketLaunch rocketLaunch)
+    public void SetupStateMachine(RocketLaunch rocketLaunch)
     {
         _stage1 = rocketLaunch.stage1;
         _stage2 = rocketLaunch.stage2;
@@ -20,16 +20,21 @@ public class RocketStateMachine : MonoBehaviour
         _stage1 ??= StageModel.GetDefaultStage();
         _stage2 ??= StageModel.GetDefaultStage();
         _stage3 ??= StageModel.GetDefaultStage();
-
-        _timeSinceLaunch = 0f;
         
+        _timeSinceLaunch = 0f;
+        currentState = RocketStage.None;
+    }
+
+    public void LaunchStateMachine()
+    {
+        _timeSinceLaunch = 0f;
         currentState = RocketStage.Stage1;
         HandleStageStart();
     }
     
-    private void Update()
+    public void UpdateTime(float deltaTime)
     {
-        _timeSinceLaunch += Time.deltaTime;
+        _timeSinceLaunch += deltaTime;
 
         switch (currentState)
         {
@@ -63,17 +68,17 @@ public class RocketStateMachine : MonoBehaviour
 
     private void HandleStageUpdate()
     {
-        CurrentActiveStage.OnStageUpdate?.Invoke();
+        CurrentActiveStage.OnStageUpdate?.Invoke(CurrentActiveStage);
     }
     private void HandleStageStart()
     {
-        CurrentActiveStage.OnStageStart?.Invoke();
+        CurrentActiveStage.OnStageStart?.Invoke(CurrentActiveStage);
     }
     private void HandleStageEnd()
     {
-        CurrentActiveStage.OnStageEnd?.Invoke();
+        CurrentActiveStage.OnStageEnd?.Invoke(CurrentActiveStage);
     }
-    private StageModel CurrentActiveStage => currentState switch 
+    public StageModel CurrentActiveStage => currentState switch 
     {
         RocketStage.Stage1 => _stage1,
         RocketStage.Stage2 => _stage2,
@@ -90,8 +95,8 @@ public class RocketStateMachine : MonoBehaviour
 
 public enum RocketStage
 {
+    None,
     Stage1,
     Stage2,
-    Stage3,
-    None
+    Stage3
 }
