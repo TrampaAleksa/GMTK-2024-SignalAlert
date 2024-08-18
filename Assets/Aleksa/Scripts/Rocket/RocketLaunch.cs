@@ -75,4 +75,15 @@ public class RocketLaunch : MonoBehaviour
     {
         return CalculateStageDuration(stage1) + CalculateStageDuration(stage2) + CalculateStageDuration(stage3);
     }
+
+    public StageModel GetStage(int stageNum)
+    {
+        return stageNum switch
+        {
+            1 => stage1,
+            2 => stage2,
+            3 => stage3,
+            _ => StageModel.GetDefaultStage()
+        };
+    }
 }
