@@ -2092,28 +2092,28 @@ MonoBehaviour:
   rocketStageEvents: {fileID: 1661198086}
   stage1:
     referenceStageMass: 1000
-    stageDurationAtReferenceMass: 5
-    engineForce: 900
-    mass: 700
-    engines: 2
+    stageDurationAtReferenceMass: 10
+    engineForce: 1100
+    mass: 1100
+    engines: 3
     angleAtStageStart: 45
   stage2:
     referenceStageMass: 500
     stageDurationAtReferenceMass: 5
-    engineForce: 1100
-    mass: 600
-    engines: 2
+    engineForce: 800
+    mass: 400
+    engines: 3
     angleAtStageStart: 45
   stage3:
     referenceStageMass: 5
-    stageDurationAtReferenceMass: 5
+    stageDurationAtReferenceMass: 40
     engineForce: 1100
     mass: 4
     engines: 2
     angleAtStageStart: 45
   maxSpeed: 100
   startAngle: 45
-  gravityStrength: 2
+  gravityStrength: 2.5
 --- !u!114 &1661198085
 MonoBehaviour:
   m_ObjectHideFlags: 0
