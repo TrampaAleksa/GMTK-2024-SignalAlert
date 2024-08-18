@@ -1,26 +1,27 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class RocketBuilder : MonoBehaviour
 {
     public RocketLaunch rocketLaunch;
 
-    public RocketConfig stage1 = new RocketConfig(800f, 1000f, 1200f, 1400f);
-    public RocketConfig stage2 = new RocketConfig(300f, 500f, 550f, 600f);
-    public RocketConfig stage3 = new RocketConfig(4.5f, 5f, 5.2f, 5.5f);
+    public RocketConfig stage1Config = new RocketConfig(800f, 1000f, 1200f, 1400f);
+    public RocketConfig stage2Config = new RocketConfig(300f, 500f, 550f, 600f);
+    public RocketConfig stage3Config = new RocketConfig(4.5f, 5f, 5.2f, 5.5f);
 
     public void ChangeStageSize(RocketStageSize sizeToSet, int stageNum)
     {
         switch (stageNum)
         {
             case 1:
-                stage1.Size = sizeToSet;
+                stage1Config.Size = sizeToSet;
                 break;
             case 2:
-                stage2.Size = sizeToSet;
+                stage2Config.Size = sizeToSet;
                 break;
             case 3:
-                stage3.Size = sizeToSet;
+                stage3Config.Size = sizeToSet;
                 break;
             default:
                 Debug.LogError("Invalid stage number!");
@@ -35,18 +36,29 @@ public class RocketBuilder : MonoBehaviour
         switch (stageNum)
         {
             case 1:
-                stage1.Engines = engines;
+                stage1Config.Engines = engines;
                 break;
             case 2:
-                stage2.Engines = engines;
+                stage2Config.Engines = engines;
                 break;
             case 3:
-                stage3.Engines = engines;
+                stage3Config.Engines = engines;
                 break;
             default:
                 Debug.LogError("Invalid stage number!");
                 break;
         }
+    }
+
+    public void BuildRocket()
+    {
+        rocketLaunch.stage1.mass = stage1Config.Mass;
+        rocketLaunch.stage2.mass = stage2Config.Mass;
+        rocketLaunch.stage3.mass = stage3Config.Mass;
+
+        rocketLaunch.stage1.engines = stage1Config.Engines;
+        rocketLaunch.stage2.engines = stage2Config.Engines;
+        rocketLaunch.stage3.engines = 0;
     }
 
     
@@ -57,13 +69,13 @@ public class RocketBuilder : MonoBehaviour
         switch (stageNum)
         {
             case 1:
-                stage1.Mass = stage1.MassOptions[(int)stage1.Size];
+                stage1Config.Mass = stage1Config.MassOptions[(int)stage1Config.Size];
                 break;
             case 2:
-                stage2.Mass = stage2.MassOptions[(int)stage2.Size];
+                stage2Config.Mass = stage2Config.MassOptions[(int)stage2Config.Size];
                 break;
             case 3:
-                stage3.Mass = stage3.MassOptions[(int)stage3.Size];
+                stage3Config.Mass = stage3Config.MassOptions[(int)stage3Config.Size];
                 break;
             default:
                 Debug.LogError("Invalid stage number!");
