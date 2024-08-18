@@ -11,6 +11,11 @@ public class RocketStateMachine : MonoBehaviour
     private StageModel _stage2;
     private StageModel _stage3;
 
+    private void Awake()
+    {
+        RocketCollisionEvents.Instance.AddOnCollidedWithObstacle((r) => Interrupt());
+    }
+
     public void SetupStateMachine(Rocket rocket)
     {
         _stage1 = rocket.stage1;
@@ -23,9 +28,12 @@ public class RocketStateMachine : MonoBehaviour
         
         _timeSinceLaunch = 0f;
         currentState = RocketStage.None;
+    }
 
-        _stage1.OnStageStart += (s) => Debug.Log("start");
-
+    public void Interrupt()
+    {
+        _timeSinceLaunch = 0f;
+        currentState = RocketStage.None;
     }
 
     public void LaunchStateMachine()

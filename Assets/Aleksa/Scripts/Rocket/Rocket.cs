@@ -21,6 +21,7 @@ public class Rocket : MonoBehaviour
     private void Awake()
     {
         _initialPosition = transform.position;
+        RocketCollisionEvents.Instance.AddOnCollidedWithObstacle((r) => transform.position = _initialPosition);
         Init();
     }
 
