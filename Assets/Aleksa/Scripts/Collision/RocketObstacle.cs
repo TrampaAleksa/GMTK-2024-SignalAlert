@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class RocketObstacle : MonoBehaviour
 {
-    private RocketLaunch _rocketLaunch;
+    private Rocket _rocket;
     private void Awake()
     {
-        _rocketLaunch = FindObjectOfType<RocketLaunch>();
+        _rocket = FindObjectOfType<Rocket>();
     }
     
     private void OnTriggerEnter(Collider other)
@@ -13,7 +13,7 @@ public class RocketObstacle : MonoBehaviour
         Debug.Log("Trigger enter");
         if (other.gameObject.CompareTag("Rocket"))
         {
-            RocketCollisionEvents.Instance.OnCollidedWithObstacleEvent(_rocketLaunch, this);
+            RocketCollisionEvents.Instance.OnCollidedWithObstacleEvent(_rocket, this);
         }
     }
 }

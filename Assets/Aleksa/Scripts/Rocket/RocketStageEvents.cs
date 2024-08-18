@@ -1,14 +1,15 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class RocketStageEvents : MonoBehaviour
 {
-    public RocketLaunch rocketLaunch;
+    [FormerlySerializedAs("rocketLaunch")] public Rocket rocket;
     public Vector2 position;
 
     private void Awake()
     {
-        rocketLaunch = GetComponent<RocketLaunch>();
+        rocket = GetComponent<Rocket>();
     }
     
     
@@ -18,8 +19,8 @@ public class RocketStageEvents : MonoBehaviour
     }
     public void Stage1Update(StageModel stage)
     {
-        Vector2 stageLaunchDirection = rocketLaunch.GetFlightDirection(stage);
-        float speed = rocketLaunch.CalculateSpeed(stage);
+        Vector2 stageLaunchDirection = rocket.GetFlightDirection(stage);
+        float speed = rocket.CalculateSpeed(stage);
         
         position += stageLaunchDirection * (speed * Time.fixedDeltaTime);
         transform.position = position;
@@ -37,15 +38,15 @@ public class RocketStageEvents : MonoBehaviour
     }
     public void Stage2Update(StageModel stage)
     {
-        Vector2 stageLaunchDirection = rocketLaunch.GetFlightDirection(stage);
-        float speed = rocketLaunch.CalculateSpeed(stage);
+        Vector2 stageLaunchDirection = rocket.GetFlightDirection(stage);
+        float speed = rocket.CalculateSpeed(stage);
         
         position += stageLaunchDirection * (speed * Time.fixedDeltaTime);
         transform.position = position;
     }
     public void Stage2End(StageModel stage)
     {
-        _currentStage3Speed = rocketLaunch.CalculateSpeed(stage);
+        _currentStage3Speed = rocket.CalculateSpeed(stage);
     }
 
 
@@ -68,10 +69,10 @@ public class RocketStageEvents : MonoBehaviour
     public void Stage3Update(StageModel stage)
     {
         DecreaseSpeed(stage);
-        Vector2 stageLaunchDirection = rocketLaunch.GetFlightDirection(stage);
+        Vector2 stageLaunchDirection = rocket.GetFlightDirection(stage);
         
         _elapsedTimeGravity += Time.fixedDeltaTime;
-        _currentGravity = Mathf.Lerp(0, rocketLaunch.gravityStrength, _elapsedTimeGravity / gravityAccelerationTime);
+        _currentGravity = Mathf.Lerp(0, rocket.gravityStrength, _elapsedTimeGravity / gravityAccelerationTime);
         
         position += stageLaunchDirection * (_currentStage3Speed * Time.fixedDeltaTime); 
         position += Vector2.down * (_currentGravity * Time.fixedDeltaTime);

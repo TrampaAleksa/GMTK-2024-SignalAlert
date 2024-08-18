@@ -20,8 +20,8 @@ public class StageBuilderUI : MonoBehaviour
         for (int i = 0; i < sizeButtons.Length; i++)
         {
             int sizeIndex = i;
-            sizeButtons[i].GetComponentInChildren<TMP_Text>().text = (RocketStageSize.Normal + sizeIndex).ToString();
-            sizeButtons[i].onClick.AddListener(() => ChangeStageSize(RocketStageSize.Normal + sizeIndex));
+            sizeButtons[i].GetComponentInChildren<TMP_Text>().text = (RocketStageSize.Small + sizeIndex).ToString();
+            sizeButtons[i].onClick.AddListener(() => ChangeStageSize(RocketStageSize.Small + sizeIndex));
         }
 
         enginesIncreaseButton.onClick.AddListener(() => ChangeStageEngines(1));

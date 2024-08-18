@@ -5,8 +5,8 @@ public class RocketCollisionEvents : MonoBehaviour
 {
     public static RocketCollisionEvents Instance;
 
-    private Action <RocketLaunch> _onCollidedWithTarget;
-    private Action <RocketLaunch> _onCollidedWithObstacle;
+    private Action <Rocket> _onCollidedWithTarget;
+    private Action <Rocket> _onCollidedWithObstacle;
     
     void Awake()
     {
@@ -15,24 +15,24 @@ public class RocketCollisionEvents : MonoBehaviour
         _onCollidedWithObstacle = null;
     }
 
-    public void OnCollidedWithTargetEvent(RocketLaunch rocketLaunch, RocketTarget target)
+    public void OnCollidedWithTargetEvent(Rocket rocket, RocketTarget target)
     {
         Debug.Log("Rocket hit the target ! Name:" + target.name);
-        _onCollidedWithTarget?.Invoke(rocketLaunch);
+        _onCollidedWithTarget?.Invoke(rocket);
     }
 
-    public void OnCollidedWithObstacleEvent(RocketLaunch rocketLaunch, RocketObstacle obstacle)
+    public void OnCollidedWithObstacleEvent(Rocket rocket, RocketObstacle obstacle)
     {
         Debug.Log("Rocket hit an obstacle ! Name:" + obstacle.name);
-        _onCollidedWithObstacle?.Invoke(rocketLaunch);
+        _onCollidedWithObstacle?.Invoke(rocket);
     }
 
-    public void AddOnCollidedWithTarget(Action<RocketLaunch> onCollidedWithTarget)
+    public void AddOnCollidedWithTarget(Action<Rocket> onCollidedWithTarget)
     {
         _onCollidedWithTarget += onCollidedWithTarget;
     }
 
-    public void AddOnCollidedWithObstacle(Action<RocketLaunch> onCollidedWithObstacle)
+    public void AddOnCollidedWithObstacle(Action<Rocket> onCollidedWithObstacle)
     {
         _onCollidedWithObstacle += onCollidedWithObstacle;
     }

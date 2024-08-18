@@ -11,11 +11,11 @@ public class RocketStateMachine : MonoBehaviour
     private StageModel _stage2;
     private StageModel _stage3;
 
-    public void SetupStateMachine(RocketLaunch rocketLaunch)
+    public void SetupStateMachine(Rocket rocket)
     {
-        _stage1 = rocketLaunch.stage1;
-        _stage2 = rocketLaunch.stage2;
-        _stage3 = rocketLaunch.stage3;
+        _stage1 = rocket.stage1;
+        _stage2 = rocket.stage2;
+        _stage3 = rocket.stage3;
         
         _stage1 ??= StageModel.GetDefaultStage();
         _stage2 ??= StageModel.GetDefaultStage();
@@ -23,7 +23,9 @@ public class RocketStateMachine : MonoBehaviour
         
         _timeSinceLaunch = 0f;
         currentState = RocketStage.None;
-        
+
+        _stage1.OnStageStart += (s) => Debug.Log("start");
+
     }
 
     public void LaunchStateMachine()

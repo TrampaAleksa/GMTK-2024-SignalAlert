@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class RocketLaunch : MonoBehaviour
+public class Rocket : MonoBehaviour
 {
     public RocketStateMachine rocketStateMachine;
     public RocketStageEvents rocketStageEvents;
