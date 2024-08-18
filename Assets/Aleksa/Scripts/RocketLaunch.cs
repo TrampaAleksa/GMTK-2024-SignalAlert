@@ -49,9 +49,9 @@ public class RocketLaunch : MonoBehaviour
         rocketStateMachine.LaunchStateMachine();
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        rocketStateMachine.UpdateTime(Time.deltaTime); // handles stage start, update and end events
+        rocketStateMachine.UpdateTime(Time.fixedDeltaTime); // handles stage start, update and end events
     }
 
     

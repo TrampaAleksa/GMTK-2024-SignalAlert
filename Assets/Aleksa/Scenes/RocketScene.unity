@@ -1208,6 +1208,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RocketLaunch: {fileID: 1661198084}
   lineRenderer: {fileID: 1537483918}
+  numberOfSeconds: 15
 --- !u!4 &1537483920
 Transform:
   m_ObjectHideFlags: 0
@@ -1533,7 +1534,7 @@ MonoBehaviour:
     angleAtStageStart: 45
   stage3:
     referenceStageMass: 5
-    stageDurationAtReferenceMass: 100
+    stageDurationAtReferenceMass: 5
     engineForce: 1100
     mass: 4
     engines: 2

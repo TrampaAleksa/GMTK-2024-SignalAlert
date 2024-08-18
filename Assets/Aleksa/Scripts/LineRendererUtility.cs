@@ -9,35 +9,35 @@ public class LineRendererUtility : MonoBehaviour
 
     private List<Vector3> positions = new List<Vector3>();
     
-    private float time = 0f;
-    private float totalTime = 0f;
+    private float timescale = 1f;
+
+    public float numberOfSeconds;
+    private float currentTime;
 
     [ContextMenu("Simulate Flight")]
     public void SimulateFlight()
     {
+        currentTime = 0f;
+        
         RocketLaunch.Init();
-        totalTime = RocketLaunch.GetTotalDuration();
-        time = 0f;
         
         positions.Clear();
         lineRenderer.positionCount = 0;
         positions.Add(Vector2.zero);
 
-        Time.timeScale = 10f;
+        Time.timeScale = timescale;
         RocketLaunch.Launch();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        if (time > totalTime)
-        {
-            Time.timeScale = 1f;
-            return;
-        }
-        time += Time.deltaTime;
+        currentTime += Time.fixedDeltaTime;
         
-        positions.Add(RocketLaunch.transform.position);
-        lineRenderer.positionCount = positions.Count;
-        lineRenderer.SetPositions(positions.ToArray());
+        if (currentTime < numberOfSeconds)
+        {
+            positions.Add(RocketLaunch.transform.position);
+            lineRenderer.positionCount = positions.Count;
+            lineRenderer.SetPositions(positions.ToArray());
+        }
     }
 }
