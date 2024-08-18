@@ -50,6 +50,7 @@ public class RocketBuilder : MonoBehaviour
         }
     }
 
+    [ContextMenu("Build Rocket")]
     public void BuildRocket()
     {
         rocketLaunch.stage1.mass = stage1Config.Mass;
@@ -58,7 +59,7 @@ public class RocketBuilder : MonoBehaviour
 
         rocketLaunch.stage1.engines = stage1Config.Engines;
         rocketLaunch.stage2.engines = stage2Config.Engines;
-        rocketLaunch.stage3.engines = 0;
+        rocketLaunch.stage3.engines = 1;
     }
 
 

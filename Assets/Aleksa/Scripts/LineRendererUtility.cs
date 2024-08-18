@@ -33,7 +33,6 @@ public class LineRendererUtility : MonoBehaviour
             return;
         }
         
-
         RocketLaunch.stage1.OnStageUpdate += (StageModel model) => positions.Add(RocketLaunch.rocketStageEvents.position);
         RocketLaunch.stage2.OnStageUpdate += (StageModel model) => positions.Add(RocketLaunch.rocketStageEvents.position);
         RocketLaunch.stage3.OnStageUpdate += (StageModel model) => positions.Add(RocketLaunch.rocketStageEvents.position);
