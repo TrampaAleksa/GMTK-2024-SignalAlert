@@ -60,6 +60,10 @@ public class RocketBuilder : MonoBehaviour
         rocket.stage1.engines = stage1Config.Engines;
         rocket.stage2.engines = stage2Config.Engines;
         rocket.stage3.engines = 1;
+        
+        rocket.stage1.size = stage1Config.Size;
+        rocket.stage2.size = stage2Config.Size;
+        rocket.stage3.size = stage3Config.Size;
     }
 
 
@@ -120,5 +124,11 @@ public class RocketConfig
         Mass = mass2; // Default to "Normal"
         Engines = 2;
         Size = RocketStageSize.Normal;
+    }
+
+    public RocketConfig(RocketStageSize size, int engines)
+    {
+        Size = size;
+        Engines = engines;
     }
 }
