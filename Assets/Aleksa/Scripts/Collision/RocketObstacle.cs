@@ -8,9 +8,10 @@ public class RocketObstacle : MonoBehaviour
         _rocketLaunch = FindObjectOfType<RocketLaunch>();
     }
     
-    private void OnCollisionEnter(Collision other)
+    private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Rocket")
+        Debug.Log("Trigger enter");
+        if (other.gameObject.CompareTag("Rocket"))
         {
             RocketCollisionEvents.Instance.OnCollidedWithObstacleEvent(_rocketLaunch, this);
         }
