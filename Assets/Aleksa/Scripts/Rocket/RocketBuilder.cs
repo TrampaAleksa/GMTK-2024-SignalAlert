@@ -4,7 +4,7 @@ using UnityEngine.Serialization;
 
 public class RocketBuilder : MonoBehaviour
 {
-    public RocketLaunch rocketLaunch;
+    [FormerlySerializedAs("rocketLaunch")] public Rocket rocket;
 
     public RocketConfig stage1Config = new RocketConfig(800f, 1000f, 1200f, 1400f);
     public RocketConfig stage2Config = new RocketConfig(300f, 500f, 550f, 600f);
@@ -50,15 +50,16 @@ public class RocketBuilder : MonoBehaviour
         }
     }
 
+    [ContextMenu("Build Rocket")]
     public void BuildRocket()
     {
-        rocketLaunch.stage1.mass = stage1Config.Mass;
-        rocketLaunch.stage2.mass = stage2Config.Mass;
-        rocketLaunch.stage3.mass = stage3Config.Mass;
+        rocket.stage1.mass = stage1Config.Mass;
+        rocket.stage2.mass = stage2Config.Mass;
+        rocket.stage3.mass = stage3Config.Mass;
 
-        rocketLaunch.stage1.engines = stage1Config.Engines;
-        rocketLaunch.stage2.engines = stage2Config.Engines;
-        rocketLaunch.stage3.engines = 0;
+        rocket.stage1.engines = stage1Config.Engines;
+        rocket.stage2.engines = stage2Config.Engines;
+        rocket.stage3.engines = 1;
     }
 
 
@@ -98,8 +99,8 @@ public class RocketBuilder : MonoBehaviour
 
 public enum RocketStageSize
 {
-    Normal, // should be equal to the reference mass
     Small,
+    Normal, // should be equal to the reference mass
     Big,
     Huge
 }
