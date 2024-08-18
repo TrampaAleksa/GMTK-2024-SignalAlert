@@ -23,6 +23,7 @@ public class RocketStateMachine : MonoBehaviour
         
         _timeSinceLaunch = 0f;
         currentState = RocketStage.None;
+        
     }
 
     public void LaunchStateMachine()
@@ -50,8 +51,11 @@ public class RocketStateMachine : MonoBehaviour
             case RocketStage.Stage2:
                 TransitionToStage(RocketStage.Stage3);
                 break;
-            case RocketStage.Stage3:
+            case RocketStage.Stage3 when IsInStage3Timeframe:
                 HandleStageUpdate();
+                break;
+            case RocketStage.Stage3 :
+                TransitionToStage(RocketStage.None);
                 break;
             case RocketStage.None:
                 // No active stage
@@ -91,6 +95,10 @@ public class RocketStateMachine : MonoBehaviour
     private bool IsInStage2Timeframe =>
         _timeSinceLaunch > _stage1.GetStageDuration() &&
         _timeSinceLaunch <= _stage1.GetStageDuration() + _stage2.GetStageDuration();
+    
+    private bool IsInStage3Timeframe =>
+        _timeSinceLaunch > _stage1.GetStageDuration() + _stage2.GetStageDuration() &&
+        _timeSinceLaunch <= _stage1.GetStageDuration() + _stage2.GetStageDuration() + _stage3.GetStageDuration();
 }
 
 public enum RocketStage

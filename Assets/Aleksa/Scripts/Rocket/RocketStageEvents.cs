@@ -21,7 +21,7 @@ public class RocketStageEvents : MonoBehaviour
         Vector2 stageLaunchDirection = rocketLaunch.GetFlightDirection(stage);
         float speed = rocketLaunch.CalculateSpeed(stage);
         
-        position += stageLaunchDirection * (speed * Time.deltaTime);
+        position += stageLaunchDirection * (speed * Time.fixedDeltaTime);
         transform.position = position;
     }
     public void Stage1End(StageModel stage)
@@ -40,7 +40,7 @@ public class RocketStageEvents : MonoBehaviour
         Vector2 stageLaunchDirection = rocketLaunch.GetFlightDirection(stage);
         float speed = rocketLaunch.CalculateSpeed(stage);
         
-        position += stageLaunchDirection * (speed * Time.deltaTime);
+        position += stageLaunchDirection * (speed * Time.fixedDeltaTime);
         transform.position = position;
     }
     public void Stage2End(StageModel stage)
@@ -70,16 +70,17 @@ public class RocketStageEvents : MonoBehaviour
         DecreaseSpeed(stage);
         Vector2 stageLaunchDirection = rocketLaunch.GetFlightDirection(stage);
         
-        _elapsedTimeGravity += Time.deltaTime;
+        _elapsedTimeGravity += Time.fixedDeltaTime;
         _currentGravity = Mathf.Lerp(0, rocketLaunch.gravityStrength, _elapsedTimeGravity / gravityAccelerationTime);
         
-        position += stageLaunchDirection * (_currentStage3Speed * Time.deltaTime); 
-        position += Vector2.down * (_currentGravity * Time.deltaTime);
+        position += stageLaunchDirection * (_currentStage3Speed * Time.fixedDeltaTime); 
+        position += Vector2.down * (_currentGravity * Time.fixedDeltaTime);
         
         transform.position = position;
     }
     public void Stage3End(StageModel stage)
     { 
+        Debug.Log("Stage 3 ended");
     }
     
 
@@ -89,7 +90,7 @@ public class RocketStageEvents : MonoBehaviour
         float referenceDecrementPerSecond = referenceStage3Speed / referenceTime;
         float adjustedDecrementPerSecond = referenceDecrementPerSecond * (stage.referenceStageMass / stage.mass);
 
-        float speedDecrementPerFrame = adjustedDecrementPerSecond * Time.deltaTime;
+        float speedDecrementPerFrame = adjustedDecrementPerSecond * Time.fixedDeltaTime;
         
         _currentStage3Speed -= speedDecrementPerFrame;
         _currentStage3Speed = Mathf.Max(_currentStage3Speed, 0f);
