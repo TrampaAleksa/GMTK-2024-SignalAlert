@@ -43,7 +43,7 @@ public class StageModel
 
     public static StageModel GetDefaultStage()
     {
-        Debug.LogError("Using default stage model");
+        Debug.LogWarning("Using default stage model");
         
         return new StageModel
         {

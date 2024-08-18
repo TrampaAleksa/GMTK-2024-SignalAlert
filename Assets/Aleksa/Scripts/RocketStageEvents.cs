@@ -80,6 +80,7 @@ public class RocketStageEvents : MonoBehaviour
     }
     public void Stage3End(StageModel stage)
     { 
+        Debug.Log("Stage 3 ended");
     }
     
 

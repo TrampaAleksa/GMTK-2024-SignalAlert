@@ -12,7 +12,7 @@ public class LineRendererUtility : MonoBehaviour
     private float timescale = 1f;
 
     public float numberOfSeconds;
-    private float currentTime;
+    private float currentTime = 9000f;
 
     [ContextMenu("Simulate Flight")]
     public void SimulateFlight()
