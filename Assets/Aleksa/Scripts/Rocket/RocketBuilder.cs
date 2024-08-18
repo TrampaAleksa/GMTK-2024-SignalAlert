@@ -61,9 +61,20 @@ public class RocketBuilder : MonoBehaviour
         rocketLaunch.stage3.engines = 0;
     }
 
-    
-    
-    
+
+    public RocketConfig GetStageConfig(int stageNum)
+    {
+        switch (stageNum)
+        {
+            case 1: return stage1Config;
+            case 2: return stage2Config;
+            case 3: return stage3Config;
+            default:
+                Debug.LogError("Invalid stage number!");
+                return null;
+        }
+    }
+
     private void SetMassBasedOnSize(int stageNum)
     {
         switch (stageNum)
@@ -83,6 +94,7 @@ public class RocketBuilder : MonoBehaviour
         }
     }
 }
+
 
 public enum RocketStageSize
 {
