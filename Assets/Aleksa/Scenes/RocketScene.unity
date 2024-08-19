@@ -461,6 +461,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa439509bdd0494f97ef46734498b377, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flightPathInfoText: {fileID: 0}
   showFlightPathInfoButtons:
   - {fileID: 1987987062}
   - {fileID: 984552694}
@@ -470,6 +471,7 @@ MonoBehaviour:
   lineRendererUtility: {fileID: 1537483919}
   rocket: {fileID: 1661198084}
   previousFlights: []
+  isDisabled: 1
 --- !u!4 &380045697
 Transform:
   m_ObjectHideFlags: 0
@@ -5111,6 +5113,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dc750c6ff4d0fc4197726520285a6f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  angleChangeSpeed: 0
   rocketHandler: {fileID: 919132149019025325}
   rocketStateMachine: {fileID: 1661198085}
   rocketStageEvents: {fileID: 1661198086}
