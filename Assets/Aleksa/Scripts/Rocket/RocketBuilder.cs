@@ -6,8 +6,8 @@ public class RocketBuilder : MonoBehaviour
 {
     [FormerlySerializedAs("rocketLaunch")] public Rocket rocket;
 
-    public RocketConfig stage1Config = new RocketConfig(800f, 1000f, 1200f, 1400f);
-    public RocketConfig stage2Config = new RocketConfig(300f, 500f, 550f, 600f);
+    public RocketConfig stage1Config = new RocketConfig(700f, 1000f, 1600f, 2400f);
+    public RocketConfig stage2Config = new RocketConfig(200f, 500f, 550f, 750f);
     public RocketConfig stage3Config = new RocketConfig(4.5f, 5f, 5.2f, 5.5f);
 
     public void ChangeStageSize(RocketStageSize sizeToSet, int stageNum)

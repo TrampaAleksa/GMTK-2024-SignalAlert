@@ -91,21 +91,29 @@ public class RocketStageEvents : MonoBehaviour
     private float _currentGravity;  
     private float _elapsedTimeGravity;  
     
+    private float _stage3InitialAngle;
+    private float _stage3Angle;
+    
     public void Stage3Start(StageModel stage)
     {
         _elapsedTimeGravity = 0f;
         _currentGravity = 0f;
+        
+        stage.angleAtStageStart = _stage2TargetAngle;
+        _stage3InitialAngle = _stage2TargetAngle;
+        _stage3Angle = _stage3InitialAngle;
+        
+        float totalAngleDifference = Mathf.DeltaAngle(_stage3InitialAngle, rocket.stage3TargetAngle);
+        angleIncrement = totalAngleDifference / stage.GetStageDuration();
     }
     public void Stage3Update(StageModel stage)
     {
         DecreaseSpeed(stage);
-        Vector2 stageLaunchDirection = rocket.GetFlightDirection(stage);
         
-        _elapsedTimeGravity += Time.fixedDeltaTime;
-        _currentGravity = Mathf.Lerp(0, rocket.gravityStrength, _elapsedTimeGravity / gravityAccelerationTime);
+        Vector2 stageLaunchDirection = GetFlightDirection(_stage3Angle);
+        _stage3Angle += angleIncrement * Time.fixedDeltaTime;
         
         position += stageLaunchDirection * (_currentStage3Speed * Time.fixedDeltaTime); 
-        position += Vector2.down * (_currentGravity * Time.fixedDeltaTime);
         
         transform.position = position;
     }
@@ -124,7 +132,7 @@ public class RocketStageEvents : MonoBehaviour
         float speedDecrementPerFrame = adjustedDecrementPerSecond * Time.fixedDeltaTime;
         
         _currentStage3Speed -= speedDecrementPerFrame;
-        _currentStage3Speed = Mathf.Max(_currentStage3Speed, 0f);
+        _currentStage3Speed = Mathf.Max(_currentStage3Speed, rocket.stage3MinimumSpeed);
     }
     
     float LerpTowardsAngle(float initialAngle, float targetAngle, float lerpAmount)

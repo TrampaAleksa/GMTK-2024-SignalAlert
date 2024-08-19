@@ -5,7 +5,6 @@ using UnityEngine.Serialization;
 
 public class Rocket : MonoBehaviour
 {
-    public float angleChangeSpeed;
     public RocketHandler rocketHandler;
 
     public RocketStateMachine rocketStateMachine;
@@ -17,8 +16,9 @@ public class Rocket : MonoBehaviour
     public StageModel stage3;
     
     public float maxSpeed = 100f;
-    public float startAngle = 45f;  // Reference angle in degrees
-    public float gravityStrength = 9.81f;
+    public float startAngle = 60f;  // Reference angle in degrees
+    public float stage3TargetAngle = -60f;
+    public float stage3MinimumSpeed =2f;
     
     private Vector2 _initialPosition = Vector2.zero;
 

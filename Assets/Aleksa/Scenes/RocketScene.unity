@@ -5113,7 +5113,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dc750c6ff4d0fc4197726520285a6f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  angleChangeSpeed: 0
   rocketHandler: {fileID: 919132149019025325}
   rocketStateMachine: {fileID: 1661198085}
   rocketStageEvents: {fileID: 1661198086}
@@ -5143,8 +5142,9 @@ MonoBehaviour:
     angleAtStageStart: 45
     size: 0
   maxSpeed: 100000
-  startAngle: 45
-  gravityStrength: 2.5
+  startAngle: 60
+  stage3TargetAngle: -60
+  stage3MinimumSpeed: 2
 --- !u!114 &1661198085
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6423,20 +6423,20 @@ MonoBehaviour:
   rocket: {fileID: 1661198084}
   stage1Config:
     MassOptions:
-    - 800
+    - 700
     - 1000
-    - 1200
-    - 1400
-    Size: 0
+    - 1600
+    - 2400
+    Size: 1
     Mass: 1000
     Engines: 2
   stage2Config:
     MassOptions:
-    - 300
+    - 200
     - 500
     - 550
-    - 600
-    Size: 0
+    - 750
+    Size: 1
     Mass: 500
     Engines: 2
   stage3Config:
@@ -6445,7 +6445,7 @@ MonoBehaviour:
     - 5
     - 5.2
     - 5.5
-    Size: 0
+    Size: 1
     Mass: 5
     Engines: 2
 --- !u!4 &2078375232
