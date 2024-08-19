@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 711192849}
   - component: {fileID: 711192848}
   - component: {fileID: 711192851}
+  - component: {fileID: 711192852}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -259,6 +260,20 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!114 &711192852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 711192847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e562c3ab71001547ac2e29c781984fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 1575235136}
+  smoothTime: 0
 --- !u!1 &724677309
 GameObject:
   m_ObjectHideFlags: 0
@@ -499,7 +514,7 @@ GameObject:
   - component: {fileID: 1575235137}
   m_Layer: 0
   m_Name: Rocket
-  m_TagString: Untagged
+  m_TagString: Rocket
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
