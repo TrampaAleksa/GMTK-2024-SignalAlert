@@ -19,6 +19,9 @@ public class StageModel
     public Action<StageModel> OnStageStart;
     public Action<StageModel> OnStageEnd;
     public Action<StageModel> OnStageUpdate;
+
+    [HideInInspector]
+    public RocketStageSize size;
     
     
     public float GetStageDuration()

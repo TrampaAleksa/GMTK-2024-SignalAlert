@@ -64,4 +64,10 @@ public class LineRendererUtility : MonoBehaviour
         lineRenderer.positionCount = positions.Count;
         lineRenderer.SetPositions(positions.ToArray());
     }
+
+    public void DrawPath(List<Vector3> path)
+    {
+        lineRenderer.positionCount = path.Count;
+        lineRenderer.SetPositions(path.ToArray());
+    }
 }

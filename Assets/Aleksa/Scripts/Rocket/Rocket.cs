@@ -7,6 +7,7 @@ public class Rocket : MonoBehaviour
 {
     public RocketStateMachine rocketStateMachine;
     public RocketStageEvents rocketStageEvents;
+    public FlightPathHistory flightPathHistory;
     
     public StageModel stage1;
     public StageModel stage2;
@@ -21,6 +22,8 @@ public class Rocket : MonoBehaviour
     private void Awake()
     {
         _initialPosition = transform.position;
+        RocketCollisionEvents.Instance.AddOnCollidedWithObstacle((r) => transform.position = _initialPosition);
+        RocketCollisionEvents.Instance.AddOnCollidedWithObstacle((r) => flightPathHistory.FinishRecording());
         Init();
     }
 
@@ -38,6 +41,9 @@ public class Rocket : MonoBehaviour
         stage2.OnStageEnd = rocketStageEvents.Stage2End;
         stage3.OnStageEnd = rocketStageEvents.Stage3End;
         
+        stage1.OnStageStart += (s) => flightPathHistory.StartRecording();
+        stage3.OnStageEnd += (s) => flightPathHistory.FinishRecording();
+
         stage1.angleAtStageStart = startAngle;
         stage2.angleAtStageStart = startAngle;
         stage3.angleAtStageStart = startAngle;
