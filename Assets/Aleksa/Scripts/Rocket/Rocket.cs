@@ -52,7 +52,7 @@ public class Rocket : MonoBehaviour
 
         stage1.OnStageStart += (s) => flightPathHistory.StartRecording();
         stage3.OnStageEnd += (s) => flightPathHistory.FinishRecording();
-        stage3.OnStageEnd += (s) => rocketHandler.ResetStages();
+        stage3.OnStageEnd += ResetRocket;
 
         stage1.angleAtStageStart = startAngle;
         stage2.angleAtStageStart = startAngle;
@@ -61,8 +61,15 @@ public class Rocket : MonoBehaviour
 
     public void Launch()
     {
+        rocketHandler.ResetStages();
         transform.position = _initialPosition;
+        CameraHandler.Instance.ResetFirstPerson();
+        CameraHandler.Instance.ToggleFirstPerson(true);
         rocketHandler.StartMotorAndLaunch(rocketStateMachine.LaunchStateMachine);
+    }
+    private void ResetRocket(StageModel m)
+    {
+        CameraHandler.Instance.ToggleFirstPerson(false);
     }
 
     void FixedUpdate()

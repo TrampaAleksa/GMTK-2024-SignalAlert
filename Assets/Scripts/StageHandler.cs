@@ -5,18 +5,23 @@ using UnityEngine;
 public class StageHandler : MonoBehaviour
 {
     private Transform _parent;
-    private Vector3 _position;
-    private Quaternion _rotation;
+    public Vector3 _position;
+    public Quaternion _rotation;
     public RocketStage StageType;
     public Rigidbody Rigidbody;
     private void Awake()
     {
         _parent = transform.parent;
-        _position = transform.position;
+        _position = transform.localPosition;
         _rotation = transform.rotation;
     }
     public void ResetStage()
     {
+        Rigidbody.useGravity = false;
+        Rigidbody.velocity = Vector3.zero;
+        transform.rotation = _rotation;
+        transform.SetParent(_parent, true);
+        transform.localPosition = _position;
         gameObject.SetActive(true);
     }
     public void DestroyStage(float duration)
@@ -37,11 +42,6 @@ public class StageHandler : MonoBehaviour
     }
     private void DestroyStage(){
         gameObject.SetActive(false);
-        Rigidbody.useGravity = false;
-        Rigidbody.velocity = Vector3.zero;
-        transform.position = _position;
-        transform.rotation = _rotation;
-        transform.SetParent(_parent, true);
     }
     public static bool TryGetStage(List<StageHandler> stages, RocketStage type, out StageHandler stage)
     {
