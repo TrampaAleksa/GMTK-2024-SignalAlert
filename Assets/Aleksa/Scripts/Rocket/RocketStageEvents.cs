@@ -7,6 +7,8 @@ public class RocketStageEvents : MonoBehaviour
     [FormerlySerializedAs("rocketLaunch")] public Rocket rocket;
     public Vector2 position;
 
+    private float angleIncrement;
+
     private void Awake()
     {
         rocket = GetComponent<Rocket>();
@@ -26,12 +28,15 @@ public class RocketStageEvents : MonoBehaviour
         _stage1InitialAngle = stage.angleAtStageStart;
         _stage1Angle = _stage1InitialAngle;
         _stage1TargetAngle = stage.CalculateAdjustedAngle();
+        
+        float totalAngleDifference = Mathf.DeltaAngle(_stage1InitialAngle, _stage1TargetAngle);
+        angleIncrement = totalAngleDifference / stage.GetStageDuration();
     }
     public void Stage1Update(StageModel stage)
     {
         Vector2 stageLaunchDirection = GetFlightDirection(_stage1Angle);
-        _stage1Angle = LerpTowardsAngle(_stage1Angle, _stage1TargetAngle, rocket.angleChangeSpeed * Time.fixedDeltaTime);
-
+        _stage1Angle += angleIncrement * Time.fixedDeltaTime;
+        
         _stage1Speed = rocket.CalculateSpeed(stage);
         
         position += stageLaunchDirection * (_stage1Speed * Time.fixedDeltaTime);
@@ -51,14 +56,19 @@ public class RocketStageEvents : MonoBehaviour
     public void Stage2Start(StageModel stage)
     {
         stage.angleAtStageStart = _stage1TargetAngle;
+        
         _stage2InitialAngle = _stage1TargetAngle;
         _stage2Angle = _stage2InitialAngle;
         _stage2TargetAngle = stage.CalculateAdjustedAngle();
+        
+        float totalAngleDifference = Mathf.DeltaAngle(_stage2InitialAngle, _stage2TargetAngle);
+        angleIncrement = totalAngleDifference / stage.GetStageDuration();
     }
     public void Stage2Update(StageModel stage)
     {
         Vector2 stageLaunchDirection = GetFlightDirection(_stage2Angle);
-        _stage2Angle = LerpTowardsAngle(_stage2Angle, _stage2TargetAngle, rocket.angleChangeSpeed * Time.fixedDeltaTime);
+        _stage2Angle += angleIncrement * Time.fixedDeltaTime;
+        
         _stage2Speed = rocket.CalculateSpeed(stage) + _stage1Speed;
         
         position += stageLaunchDirection * (_stage2Speed  * Time.fixedDeltaTime);
