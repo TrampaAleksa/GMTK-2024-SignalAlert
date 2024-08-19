@@ -11,37 +11,57 @@ public class RocketStageEvents : MonoBehaviour
     {
         rocket = GetComponent<Rocket>();
     }
+
+
+    private float _stage1Speed;
     
+    private float _stage1InitialAngle;
+    private float _stage1Angle;
+    private float _stage1TargetAngle;
     
     public void Stage1Start(StageModel stage)
     {
         position = Vector2.zero;
+        
+        _stage1InitialAngle = stage.angleAtStageStart;
+        _stage1Angle = _stage1InitialAngle;
+        _stage1TargetAngle = stage.CalculateAdjustedAngle();
     }
     public void Stage1Update(StageModel stage)
     {
-        Vector2 stageLaunchDirection = rocket.GetFlightDirection(stage);
-        float speed = rocket.CalculateSpeed(stage);
+        Vector2 stageLaunchDirection = GetFlightDirection(_stage1Angle);
+        _stage1Angle = LerpTowardsAngle(_stage1Angle, _stage1TargetAngle, rocket.angleChangeSpeed * Time.fixedDeltaTime);
+
+        _stage1Speed = rocket.CalculateSpeed(stage);
         
-        position += stageLaunchDirection * (speed * Time.fixedDeltaTime);
+        position += stageLaunchDirection * (_stage1Speed * Time.fixedDeltaTime);
         transform.position = position;
     }
     public void Stage1End(StageModel stage)
     {
         
     }
+
+
+    private float _stage2Speed;
     
-    
-    
+    private float _stage2InitialAngle;
+    private float _stage2Angle;
+    private float _stage2TargetAngle;
     public void Stage2Start(StageModel stage)
     {
-        
+        stage.angleAtStageStart = _stage1TargetAngle;
+        _stage2InitialAngle = _stage1TargetAngle;
+        _stage2Angle = _stage2InitialAngle;
+        _stage2TargetAngle = stage.CalculateAdjustedAngle();
     }
     public void Stage2Update(StageModel stage)
     {
-        Vector2 stageLaunchDirection = rocket.GetFlightDirection(stage);
-        float speed = rocket.CalculateSpeed(stage);
+        Vector2 stageLaunchDirection = GetFlightDirection(_stage2Angle);
+        _stage2Angle = LerpTowardsAngle(_stage2Angle, _stage2TargetAngle, rocket.angleChangeSpeed * Time.fixedDeltaTime);
+        _stage2Speed = rocket.CalculateSpeed(stage) + _stage1Speed;
         
-        position += stageLaunchDirection * (speed * Time.fixedDeltaTime);
+        position += stageLaunchDirection * (_stage2Speed  * Time.fixedDeltaTime);
         transform.position = position;
     }
     public void Stage2End(StageModel stage)
@@ -95,5 +115,15 @@ public class RocketStageEvents : MonoBehaviour
         
         _currentStage3Speed -= speedDecrementPerFrame;
         _currentStage3Speed = Mathf.Max(_currentStage3Speed, 0f);
+    }
+    
+    float LerpTowardsAngle(float initialAngle, float targetAngle, float lerpAmount)
+    {
+        return Mathf.LerpAngle(initialAngle, targetAngle, lerpAmount);
+    }
+    
+    private Vector2 GetFlightDirection(float angle)
+    {
+        return new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad)).normalized;
     }
 }
