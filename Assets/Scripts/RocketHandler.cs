@@ -14,6 +14,10 @@ public class RocketHandler : MonoBehaviour
     public float duration = 2.0f;
     public float destroyDuration = 2.0f;
     public RocketStage _testType;
+    private void Start()
+    {
+        RocketCollisionEvents.Instance.AddOnCollidedWithObstacle((r) => CameraHandler.Instance.ToggleFirstPerson(false));
+    }
     public void StartMotorAndLaunch(Action onPrepDone) => StartCoroutine(LaunchAnimation(onPrepDone));
     private void StartMotors() => MotorHandler.StartMotors(Motors, duration);
     private void StartLaunch() => MotorHandler.StartLaunch(Motors, duration);
