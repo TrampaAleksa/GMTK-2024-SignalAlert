@@ -5,6 +5,7 @@ using UnityEngine.Serialization;
 
 public class Rocket : MonoBehaviour
 {
+    public float angleChangeSpeed;
     public RocketStateMachine rocketStateMachine;
     public RocketStageEvents rocketStageEvents;
     public FlightPathHistory flightPathHistory;
