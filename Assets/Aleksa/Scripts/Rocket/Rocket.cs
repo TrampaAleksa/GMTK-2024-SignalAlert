@@ -21,10 +21,12 @@ public class Rocket : MonoBehaviour
     public float stage3MinimumSpeed =2f;
     
     private Vector2 _initialPosition = Vector2.zero;
+    private Quaternion _initialQuaternion = Quaternion.identity;
 
     private void Awake()
     {
         _initialPosition = transform.position;
+        _initialQuaternion = transform.rotation;
         RocketCollisionEvents.Instance.AddOnCollidedWithObstacle((r) => transform.position = _initialPosition);
         RocketCollisionEvents.Instance.AddOnCollidedWithObstacle((r) => flightPathHistory.FinishRecording());
         Init();
@@ -52,7 +54,7 @@ public class Rocket : MonoBehaviour
 
         stage1.OnStageStart += (s) => flightPathHistory.StartRecording();
         stage3.OnStageEnd += (s) => flightPathHistory.FinishRecording();
-        stage3.OnStageEnd += (s) => rocketHandler.ResetStages();
+        stage3.OnStageEnd += ResetRocket;
 
         stage1.angleAtStageStart = startAngle;
         stage2.angleAtStageStart = startAngle;
@@ -62,7 +64,15 @@ public class Rocket : MonoBehaviour
     public void Launch()
     {
         transform.position = _initialPosition;
+        transform.rotation = _initialQuaternion;
+        rocketHandler.ResetStages();
+        CameraHandler.Instance.ResetFirstPerson();
+        CameraHandler.Instance.ToggleFirstPerson(true);
         rocketHandler.StartMotorAndLaunch(rocketStateMachine.LaunchStateMachine);
+    }
+    private void ResetRocket(StageModel m)
+    {
+        CameraHandler.Instance.ToggleFirstPerson(false);
     }
 
     void FixedUpdate()
