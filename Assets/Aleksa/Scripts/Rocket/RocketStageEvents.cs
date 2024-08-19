@@ -41,6 +41,8 @@ public class RocketStageEvents : MonoBehaviour
         
         position += stageLaunchDirection * (_stage1Speed * Time.fixedDeltaTime);
         transform.position = position;
+        transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, -90f+_stage1Angle));
+
     }
     public void Stage1End(StageModel stage)
     {
@@ -73,10 +75,11 @@ public class RocketStageEvents : MonoBehaviour
         
         position += stageLaunchDirection * (_stage2Speed  * Time.fixedDeltaTime);
         transform.position = position;
+        transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, -90f+_stage2Angle));
     }
     public void Stage2End(StageModel stage)
     {
-        _currentStage3Speed = rocket.CalculateSpeed(stage);
+        _currentStage3Speed = rocket.CalculateSpeed(stage) + _stage2Speed;
     }
 
 
@@ -114,8 +117,9 @@ public class RocketStageEvents : MonoBehaviour
         _stage3Angle += angleIncrement * Time.fixedDeltaTime;
         
         position += stageLaunchDirection * (_currentStage3Speed * Time.fixedDeltaTime); 
-        
         transform.position = position;
+        transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, -90f+_stage3Angle));
+
     }
     public void Stage3End(StageModel stage)
     { 
