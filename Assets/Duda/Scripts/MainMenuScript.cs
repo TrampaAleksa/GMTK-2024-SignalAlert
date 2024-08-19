@@ -11,7 +11,7 @@ public class MainMenuScript : MonoBehaviour
         // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1); // Loads Level_0
         SceneManager.LoadScene("Level_0"); // Loads Level_0
     }
-
+    
     public void QuitGame()
     {
         print("Quit!!!");
