@@ -7,7 +7,7 @@ public class StageHandler : MonoBehaviour
     private Transform _parent;
     private Vector3 _position;
     private Quaternion _rotation;
-    public StageType StageType;
+    public RocketStage StageType;
     public Rigidbody Rigidbody;
     private void Awake()
     {
@@ -25,7 +25,7 @@ public class StageHandler : MonoBehaviour
         Rigidbody.useGravity = true;
         StartCoroutine(WaitAndDestroy(duration));
     }
-    public bool IsStage(StageType type) => type == StageType;
+    public bool IsStage(RocketStage type) => type == StageType;
     private IEnumerator WaitAndDestroy(float duration)
     {
         float time = 0f;
@@ -43,7 +43,7 @@ public class StageHandler : MonoBehaviour
         transform.rotation = _rotation;
         transform.SetParent(_parent, true);
     }
-    public static bool TryGetStage(List<StageHandler> stages, StageType type, out StageHandler stage)
+    public static bool TryGetStage(List<StageHandler> stages, RocketStage type, out StageHandler stage)
     {
         stage = null;
         foreach (var st in stages)

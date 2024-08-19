@@ -5,6 +5,8 @@ using UnityEngine.Serialization;
 
 public class Rocket : MonoBehaviour
 {
+    public RocketHandler rocketHandler;
+
     public RocketStateMachine rocketStateMachine;
     public RocketStageEvents rocketStageEvents;
     public FlightPathHistory flightPathHistory;
@@ -38,11 +40,18 @@ public class Rocket : MonoBehaviour
         stage2.OnStageUpdate = rocketStageEvents.Stage2Update;
         stage3.OnStageUpdate = rocketStageEvents.Stage3Update;
         stage1.OnStageEnd = rocketStageEvents.Stage1End;
+        stage1.OnStageEnd = (model) =>
+        {
+            rocketHandler.StopMotors();
+            rocketHandler.StageChanged(RocketStage.Stage1);
+        };
         stage2.OnStageEnd = rocketStageEvents.Stage2End;
+        stage2.OnStageEnd = (model) => rocketHandler.StageChanged(RocketStage.Stage2);
         stage3.OnStageEnd = rocketStageEvents.Stage3End;
-        
+
         stage1.OnStageStart += (s) => flightPathHistory.StartRecording();
         stage3.OnStageEnd += (s) => flightPathHistory.FinishRecording();
+        stage3.OnStageEnd += (s) => rocketHandler.ResetStages();
 
         stage1.angleAtStageStart = startAngle;
         stage2.angleAtStageStart = startAngle;
@@ -52,7 +61,7 @@ public class Rocket : MonoBehaviour
     public void Launch()
     {
         transform.position = _initialPosition;
-        rocketStateMachine.LaunchStateMachine();
+        rocketHandler.StartMotorAndLaunch(rocketStateMachine.LaunchStateMachine);
     }
 
     void FixedUpdate()
