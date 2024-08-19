@@ -26,12 +26,12 @@ public class StageModel
     
     public float GetStageDuration()
     {
-        return (stageDurationAtReferenceMass * referenceStageMass) / (mass * engines);
+        return (stageDurationAtReferenceMass * (mass) / referenceStageMass);
     }
     
     public float CalculateSpeed(float maxSpeed)
     {
-        float rocketSpeed = engineForce * engines / mass;
+        float rocketSpeed = engineForce * (engines * 0.3f) / mass;
         rocketSpeed = Mathf.Min(rocketSpeed, maxSpeed);
         return rocketSpeed;
     }

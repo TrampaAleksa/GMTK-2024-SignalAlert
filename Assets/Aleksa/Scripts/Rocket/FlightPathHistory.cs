@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class FlightPathHistory : MonoBehaviour
 {
+    public TMP_Text flightPathInfoText;
     public Button[] showFlightPathInfoButtons;
     
     public LineRendererUtility lineRendererUtility;
@@ -15,9 +16,14 @@ public class FlightPathHistory : MonoBehaviour
     private int _currentFlightNumber = -1;
 
     private bool _isRecording;
+
+    public bool isDisabled = true;
     
     private void Awake()
     {
+        if (isDisabled)
+            return;
+        
         previousFlights = new List<FlightPath>();
         rocket = FindObjectOfType<Rocket>();
         lineRendererUtility = FindObjectOfType<LineRendererUtility>();
@@ -33,6 +39,9 @@ public class FlightPathHistory : MonoBehaviour
 
     public void StartRecording()
     {
+        if (isDisabled)
+            return;
+        
         FlightPath newPath = new FlightPath();
         
         newPath.positions = new List<Vector3>();
@@ -48,25 +57,29 @@ public class FlightPathHistory : MonoBehaviour
     
     public void FinishRecording()
     {
+        if (isDisabled)
+            return;
         showFlightPathInfoButtons[_currentFlightNumber].gameObject.SetActive(true);
         _isRecording = false;
     }
 
     private void ShowFlightPathInfo(int flightIndex)
     {
+        if (isDisabled)
+            return;
         lineRendererUtility.DrawPath(previousFlights[flightIndex].positions);
+        flightPathInfoText.text = previousFlights[flightIndex].ToString();
     }
     
     private void FixedUpdate()
     {
+        if (isDisabled)
+            return;
+        
         if (!_isRecording) 
             return;
         
         previousFlights[_currentFlightNumber].positions.Add(rocket.transform.position);
-        
-        Debug.Log("Stage1 size: " + previousFlights[_currentFlightNumber].stage1Config.Size);
-        Debug.Log("Stage2 size: " + previousFlights[_currentFlightNumber].stage2Config.Size);
-        Debug.Log("Stage3 size: " + previousFlights[_currentFlightNumber].stage3Config.Size);
     }
 }
 
@@ -95,5 +108,10 @@ public struct FlightPath
                 Debug.LogError("Invalid stage number");
                 break;
         }
+    }
+
+    public override string ToString()
+    {
+        return $"Stage I: {stage1Config.Size}, {stage1Config.Engines} \nStage II: {stage2Config.Size}, {stage2Config.Engines} \nStage III: {stage3Config.Size}, {stage3Config.Engines}";
     }
 }
