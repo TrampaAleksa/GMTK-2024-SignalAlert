@@ -12,7 +12,9 @@ public class GameManager : MonoBehaviour
     public Rocket rocket;
     public int launchAttempts = 3;
     public bool randomizeTarget;
-    
+    public GameObject gameOver;
+    public GameObject win;
+
     private void Start()
     {
         if (randomizeTarget)
@@ -38,14 +40,13 @@ public class GameManager : MonoBehaviour
     {
         if (launchAttempts <= 0)
         {
-            GameOver();
+            gameOver.SetActive(true);
         }
     }
 
     private void OnRocketHitTarget(Rocket r)
     {
-        Debug.Log("Level passed");
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // reload scene
+        win.SetActive(true);
     }
 
     private void SpawnTargetAtRandomSpot()

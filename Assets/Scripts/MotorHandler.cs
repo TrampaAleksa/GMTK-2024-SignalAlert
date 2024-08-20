@@ -11,16 +11,18 @@ public class MotorHandler : MonoBehaviour
     [SerializeField]
     private float minimum;
     [SerializeField]
-    private float maximum;
+    private float maximumSmoke;
+    [SerializeField]
+    private float maximumFire;
     public void StartMotor(float duration)
     {
         StartParticle(smokeParticle);
-        StartFade(smokeParticle, maximum, duration);
+        StartFade(smokeParticle, maximumSmoke, duration);
     }
     public void LaunchMotor(float duration, Action onLaunchFinished=null)
     {
         StartParticle(fireParticle);
-        StartFade(fireParticle, maximum, duration, onLaunchFinished);
+        StartFade(fireParticle, maximumFire, duration, onLaunchFinished);
     }
     public void StopMotor(float duration)
     {

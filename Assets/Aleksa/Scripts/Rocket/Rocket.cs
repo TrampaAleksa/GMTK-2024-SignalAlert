@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Serialization;
 
 public class Rocket : MonoBehaviour
@@ -70,10 +71,7 @@ public class Rocket : MonoBehaviour
         CameraHandler.Instance.ToggleFirstPerson(true);
         rocketHandler.StartMotorAndLaunch(rocketStateMachine.LaunchStateMachine);
     }
-    private void ResetRocket(StageModel m)
-    {
-        CameraHandler.Instance.ToggleFirstPerson(false);
-    }
+    private void ResetRocket(StageModel m)=> rocketHandler.ResetRocket();
 
     void FixedUpdate()
     {

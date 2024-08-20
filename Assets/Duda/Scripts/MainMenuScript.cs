@@ -6,12 +6,15 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuScript : MonoBehaviour
 {
-    public void PlayGame()
+    public int _currentId = 0;
+    private void Awake()
     {
-        // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1); // Loads Level_0
-        SceneManager.LoadScene("Level_0"); // Loads Level_0
+        _currentId = SceneManager.GetActiveScene().buildIndex;
     }
-    
+    public void PlayGame() => SceneManager.LoadScene(1);
+    public void NextLevel() => SceneManager.LoadScene(_currentId + 1);
+    public void ReloadLevel() => SceneManager.LoadScene(_currentId);
+
     public void QuitGame()
     {
         print("Quit!!!");

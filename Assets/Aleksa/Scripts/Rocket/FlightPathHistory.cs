@@ -83,7 +83,8 @@ public class FlightPathHistory : MonoBehaviour
         
         previousFlights.Add(newPath);
 
-        _currentFlightNumber++;
+        _currentFlightNumber = _currentFlightNumber == (previousFlights.Count - 1) ? 0: _currentFlightNumber+1;
+        _currentFlightNumber=Mathf.Min(previousFlights.Count-1, _currentFlightNumber+1);
         _isRecording = true;
         
         stage1Info.transform.position = new Vector3(infoOffset.x, infoOffset.y, 0f);

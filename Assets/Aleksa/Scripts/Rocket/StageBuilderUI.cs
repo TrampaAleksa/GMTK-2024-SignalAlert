@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class StageBuilderUI : MonoBehaviour
 {
-    public Button[] sizeButtons;
+    public UnityEngine.UI.Slider slider;
     public TMP_Text enginesLabel;
     public Button enginesIncreaseButton;
     public Button enginesDecreaseButton;
@@ -17,12 +17,7 @@ public class StageBuilderUI : MonoBehaviour
         _stageNum = stageNum;
         _rocketBuilder = rocketBuilder;
 
-        for (int i = 0; i < sizeButtons.Length; i++)
-        {
-            int sizeIndex = i;
-            sizeButtons[i].GetComponentInChildren<TMP_Text>().text = (RocketStageSize.Small + sizeIndex).ToString();
-            sizeButtons[i].onClick.AddListener(() => ChangeStageSize(RocketStageSize.Small + sizeIndex));
-        }
+        slider.onValueChanged.AddListener((val) => ChangeStageSize(RocketStageSize.Small + (int)val));
 
         enginesIncreaseButton.onClick.AddListener(() => ChangeStageEngines(1));
         enginesDecreaseButton.onClick.AddListener(() => ChangeStageEngines(-1));

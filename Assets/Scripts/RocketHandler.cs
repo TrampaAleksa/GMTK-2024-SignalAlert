@@ -3,10 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 using static UnityEngine.CullingGroup;
 
 public class RocketHandler : MonoBehaviour
 {
+    [SerializeField]
+    private UnityEvent OnRocketReset;
     [SerializeField]
     private List<MotorHandler> Motors= new();
     [SerializeField]
@@ -14,9 +17,15 @@ public class RocketHandler : MonoBehaviour
     public float duration = 2.0f;
     public float destroyDuration = 2.0f;
     public RocketStage _testType;
+
     private void Start()
     {
-        RocketCollisionEvents.Instance.AddOnCollidedWithObstacle((r) => CameraHandler.Instance.ToggleFirstPerson(false));
+        RocketCollisionEvents.Instance.AddOnCollidedWithObstacle((r) => ResetRocket());
+    }
+    public void ResetRocket()
+    {
+        OnRocketReset?.Invoke();
+        CameraHandler.Instance.ToggleFirstPerson(false);
     }
     public void StartMotorAndLaunch(Action onPrepDone) => StartCoroutine(LaunchAnimation(onPrepDone));
     private void StartMotors() => MotorHandler.StartMotors(Motors, duration);
