@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class FlightPathHistory : MonoBehaviour
 {
-    public TMP_Text flightPathInfoText;
     public Button[] showFlightPathInfoButtons;
     
     public LineRendererUtility lineRendererUtility;
@@ -18,6 +17,11 @@ public class FlightPathHistory : MonoBehaviour
     private bool _isRecording;
 
     public bool isDisabled = true;
+
+    public TMP_Text stage1Info;
+    public TMP_Text stage2Info;
+    public TMP_Text stage3Info;
+    public Vector2 infoOffset = new Vector2(8f, -2f);
     
     private void Awake()
     {
@@ -36,6 +40,21 @@ public class FlightPathHistory : MonoBehaviour
             showFlightPathInfoButtons[index].gameObject.SetActive(false);
         }
     }
+    private void Start()
+    {
+        rocket.stage2.OnStageStart += model =>
+        {
+            var flightPath = previousFlights[_currentFlightNumber];
+            stage2Info.transform.position = flightPath.positions[^1] + new Vector3(infoOffset.x, infoOffset.y, 0f);
+        };
+
+        rocket.stage3.OnStageStart += model =>
+        {
+            var flightPath = previousFlights[_currentFlightNumber];
+            stage3Info.transform.position = flightPath.positions[^1] + new Vector3(infoOffset.x, infoOffset.y, 0f);
+        };
+    }
+
 
     public void StartRecording()
     {
@@ -43,6 +62,10 @@ public class FlightPathHistory : MonoBehaviour
             return;
         
         FlightPath newPath = new FlightPath();
+
+        stage1Info.gameObject.SetActive(false);
+        stage2Info.gameObject.SetActive(false);
+        stage3Info.gameObject.SetActive(false);
         
         newPath.positions = new List<Vector3>();
         newPath.AddFlightConfig(rocket.stage1.size, rocket.stage1.engines, 1);
@@ -53,6 +76,8 @@ public class FlightPathHistory : MonoBehaviour
 
         _currentFlightNumber++;
         _isRecording = true;
+        
+        stage1Info.transform.position = new Vector3(infoOffset.x, infoOffset.y, 0f);
     }
     
     public void FinishRecording()
@@ -68,7 +93,14 @@ public class FlightPathHistory : MonoBehaviour
         if (isDisabled)
             return;
         lineRendererUtility.DrawPath(previousFlights[flightIndex].positions);
-        flightPathInfoText.text = previousFlights[flightIndex].ToString();
+        
+        stage1Info.text = previousFlights[flightIndex].stage1Config.ToString();
+        stage2Info.text = previousFlights[flightIndex].stage2Config.ToString();
+        stage3Info.text = previousFlights[flightIndex].stage3Config.ToString();
+        
+        stage1Info.gameObject.SetActive(true);
+        stage2Info.gameObject.SetActive(true);
+        stage3Info.gameObject.SetActive(true);
     }
     
     private void FixedUpdate()
