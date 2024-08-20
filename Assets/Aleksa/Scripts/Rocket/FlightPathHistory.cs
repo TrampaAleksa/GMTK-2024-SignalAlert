@@ -22,7 +22,7 @@ public class FlightPathHistory : MonoBehaviour
     public TMP_Text stage2Info;
     public TMP_Text stage3Info;
     public Vector2 infoOffset = new Vector2(8f, -2f);
-    
+
     private void Awake()
     {
         if (isDisabled)
@@ -44,14 +44,12 @@ public class FlightPathHistory : MonoBehaviour
     {
         rocket.stage2.OnStageStart += model =>
         {
-            var flightPath = previousFlights[_currentFlightNumber];
-            stage2Info.transform.position = flightPath.positions[^1] + new Vector3(infoOffset.x, infoOffset.y, 0f);
+            previousFlights[_currentFlightNumber].stage2Position = rocket.transform.position;
         };
 
         rocket.stage3.OnStageStart += model =>
         {
-            var flightPath = previousFlights[_currentFlightNumber];
-            stage3Info.transform.position = flightPath.positions[^1] + new Vector3(infoOffset.x, infoOffset.y, 0f);
+            previousFlights[_currentFlightNumber].stage3Position = rocket.transform.position;
         };
     }
 
@@ -92,17 +90,22 @@ public class FlightPathHistory : MonoBehaviour
     {
         if (isDisabled)
             return;
-        lineRendererUtility.DrawPath(previousFlights[flightIndex].positions);
+        var previousFlight = previousFlights[flightIndex];
+        lineRendererUtility.DrawPath(previousFlight.positions);
         
-        stage1Info.text = previousFlights[flightIndex].stage1Config.ToString();
-        stage2Info.text = previousFlights[flightIndex].stage2Config.ToString();
-        stage3Info.text = previousFlights[flightIndex].stage3Config.ToString();
+        stage1Info.text = previousFlight.stage1Config.ToString();
+        stage2Info.text = previousFlight.stage2Config.ToString();
+        stage3Info.text = previousFlight.stage3Config.ToString();
         
+        stage1Info.transform.position = previousFlight.stage1Position + infoOffset;
+        stage2Info.transform.position = previousFlight.stage2Position + infoOffset;
+        stage3Info.transform.position = previousFlight.stage3Position + infoOffset;
+
         stage1Info.gameObject.SetActive(true);
         stage2Info.gameObject.SetActive(true);
         stage3Info.gameObject.SetActive(true);
     }
-    
+
     private void FixedUpdate()
     {
         if (isDisabled)
@@ -116,12 +119,15 @@ public class FlightPathHistory : MonoBehaviour
 }
 
 [Serializable]
-public struct FlightPath
+public class FlightPath
 {
     public List<Vector3> positions;
     public RocketConfig stage1Config;
     public RocketConfig stage2Config;
     public RocketConfig stage3Config;
+    public Vector2 stage1Position;
+    public Vector2 stage2Position = new Vector3(1110f, 1110f, 0f);
+    public Vector2 stage3Position = new Vector3(1110f, 1110f, 0f);
     
     public void AddFlightConfig(RocketStageSize size, int engines, int stageNum)
     {
