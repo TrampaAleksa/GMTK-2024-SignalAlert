@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -22,6 +23,11 @@ public class FlightPathHistory : MonoBehaviour
     public TMP_Text stage2Info;
     public TMP_Text stage3Info;
     public Vector2 infoOffset = new Vector2(8f, -2f);
+    
+    public float delayBeforeDrawingLastPath = 2f;
+    public float timeBetweenDrawIterationLastPath = 2f;
+    public int numberOfDrawingIterationsLastPath = 10;
+    private Coroutine _drawOverTimeRoutine;
 
     private void Awake()
     {
@@ -86,6 +92,8 @@ public class FlightPathHistory : MonoBehaviour
             return;
         showFlightPathInfoButtons[_currentFlightNumber].gameObject.SetActive(true);
         _isRecording = false;
+
+        StartCoroutine(DrawPathOverTime(previousFlights[_currentFlightNumber].positions));
     }
 
     private void ShowFlightPathInfo(int flightIndex)
@@ -117,6 +125,41 @@ public class FlightPathHistory : MonoBehaviour
             return;
         
         previousFlights[_currentFlightNumber].positions.Add(rocket.transform.position);
+    }
+    
+    
+    
+    
+    private IEnumerator DrawPathOverTime(List<Vector3> positions)
+    {
+        yield return new WaitForSeconds(delayBeforeDrawingLastPath);
+
+        lineRendererUtility.lineRenderer.positionCount = 0;
+        int totalPositions = positions.Count;
+        int pointsPerIteration = Mathf.Max(1, totalPositions / numberOfDrawingIterationsLastPath);
+
+        var pointsToDraw = new List<Vector3>();
+        
+        for (int i = 0; i < numberOfDrawingIterationsLastPath; i++)
+        {
+            int start = i * pointsPerIteration;
+            int end = Mathf.Min(start + pointsPerIteration, totalPositions);
+            
+            for (int j = start; j < end; j++)
+            {
+                pointsToDraw.Add(positions[j]);
+            }
+
+            lineRendererUtility.DrawPath(pointsToDraw);
+
+            yield return new WaitForSeconds(timeBetweenDrawIterationLastPath);
+
+            if (end >= totalPositions)
+            {
+                ShowFlightPathInfo(_currentFlightNumber);
+                break;
+            }
+        }
     }
 }
 

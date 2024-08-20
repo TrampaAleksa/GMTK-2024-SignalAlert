@@ -401,6 +401,9 @@ MonoBehaviour:
   stage2Info: {fileID: 1080405599}
   stage3Info: {fileID: 1327025602}
   infoOffset: {x: 8, y: -2}
+  delayBeforeDrawingLastPath: 2
+  timeBetweenDrawIterationLastPath: 0.05
+  numberOfDrawingIterationsLastPath: 10
 --- !u!4 &380045697
 Transform:
   m_ObjectHideFlags: 0
