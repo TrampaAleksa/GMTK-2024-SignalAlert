@@ -153,13 +153,9 @@ public class FlightPathHistory : MonoBehaviour
             lineRendererUtility.DrawPath(pointsToDraw);
 
             yield return new WaitForSeconds(timeBetweenDrawIterationLastPath);
-
-            if (end >= totalPositions)
-            {
-                ShowFlightPathInfo(_currentFlightNumber);
-                break;
-            }
         }
+        
+        ShowFlightPathInfo(_currentFlightNumber);
     }
 }
 
