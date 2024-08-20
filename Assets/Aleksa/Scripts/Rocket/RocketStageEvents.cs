@@ -79,7 +79,8 @@ public class RocketStageEvents : MonoBehaviour
     }
     public void Stage2End(StageModel stage)
     {
-        _currentStage3Speed = rocket.CalculateSpeed(stage) + _stage2Speed;
+        
+        
     }
 
 
@@ -99,6 +100,11 @@ public class RocketStageEvents : MonoBehaviour
     
     public void Stage3Start(StageModel stage)
     {
+        _currentStage3Speed = rocket.CalculateSpeed(stage) + _stage2Speed;
+
+        speedDecrement = _currentStage3Speed - speedAtStageEnd / stage.GetStageDuration();
+        speedDecrement *=  stage.mass / stage.referenceStageMass;
+        
         _elapsedTimeGravity = 0f;
         _currentGravity = 0f;
         
@@ -125,18 +131,13 @@ public class RocketStageEvents : MonoBehaviour
     { 
         Debug.Log("Stage 3 ended");
     }
-    
 
+    public float speedAtStageEnd = 3f;
+    private float speedDecrement;
 
     private void DecreaseSpeed(StageModel stage)
     {
-        float referenceDecrementPerSecond = referenceStage3Speed / referenceTime;
-        float adjustedDecrementPerSecond = referenceDecrementPerSecond * (stage.referenceStageMass / stage.mass);
-
-        float speedDecrementPerFrame = adjustedDecrementPerSecond * Time.fixedDeltaTime;
-        
-        _currentStage3Speed -= speedDecrementPerFrame;
-        _currentStage3Speed = Mathf.Max(_currentStage3Speed, rocket.stage3MinimumSpeed);
+        _currentStage3Speed = Mathf.Max(_currentStage3Speed - speedDecrement, rocket.stage3MinimumSpeed);
     }
     
     float LerpTowardsAngle(float initialAngle, float targetAngle, float lerpAmount)
