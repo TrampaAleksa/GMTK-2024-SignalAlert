@@ -48,6 +48,9 @@ public class FlightPathHistory : MonoBehaviour
     }
     private void Start()
     {
+        if (isDisabled)
+            return;
+        
         rocket.stage2.OnStageStart += model =>
         {
             previousFlights[_currentFlightNumber].stage2Position = rocket.transform.position;
