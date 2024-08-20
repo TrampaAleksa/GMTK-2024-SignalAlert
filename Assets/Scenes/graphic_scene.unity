@@ -4053,7 +4053,7 @@ MonoBehaviour:
     angleAtStageStart: 45
     size: 0
   maxSpeed: 100000000
-  startAngle: 45
+  startAngle: 60
   stage3TargetAngle: -60
   stage3MinimumSpeed: 2
 --- !u!114 &1661198085
