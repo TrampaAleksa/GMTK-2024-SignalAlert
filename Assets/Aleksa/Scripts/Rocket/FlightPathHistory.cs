@@ -58,6 +58,8 @@ public class FlightPathHistory : MonoBehaviour
     {
         if (isDisabled)
             return;
+
+        lineRendererUtility.lineRenderer.positionCount = 0;
         
         FlightPath newPath = new FlightPath();
 
@@ -93,9 +95,9 @@ public class FlightPathHistory : MonoBehaviour
         var previousFlight = previousFlights[flightIndex];
         lineRendererUtility.DrawPath(previousFlight.positions);
         
-        stage1Info.text = previousFlight.stage1Config.ToString();
-        stage2Info.text = previousFlight.stage2Config.ToString();
-        stage3Info.text = previousFlight.stage3Config.ToString();
+        stage1Info.text = $"Stage I: {previousFlight.stage1Config.Size.ToString()}, {previousFlight.stage1Config.Engines}";
+        stage2Info.text = $"Stage II: {previousFlight.stage2Config.Size.ToString()}, {previousFlight.stage2Config.Engines}";
+        stage3Info.text = $"Stage III: {previousFlight.stage3Config.Size.ToString()}, {previousFlight.stage3Config.Engines}";
         
         stage1Info.transform.position = previousFlight.stage1Position + infoOffset;
         stage2Info.transform.position = previousFlight.stage2Position + infoOffset;
