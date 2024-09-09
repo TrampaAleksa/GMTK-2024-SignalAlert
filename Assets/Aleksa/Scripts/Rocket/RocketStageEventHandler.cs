@@ -1,10 +1,8 @@
-using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-public class RocketStageEvents : MonoBehaviour
+public class RocketStageEventHandler : MonoBehaviour
 {
-    [FormerlySerializedAs("rocketLaunch")] public Rocket rocket;
+    public Rocket rocket;
     public Vector2 Position { get; set; }
 
     private StageModel stage1 => rocket.stage1;

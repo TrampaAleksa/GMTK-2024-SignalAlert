@@ -34,9 +34,9 @@ public class LineRendererUtility : MonoBehaviour
             return;
         }
         
-        rocket.stage1.OnStageUpdate += (StageModel model) => positions.Add(rocket.rocketStageEvents.Position);
-        rocket.stage2.OnStageUpdate += (StageModel model) => positions.Add(rocket.rocketStageEvents.Position);
-        rocket.stage3.OnStageUpdate += (StageModel model) => positions.Add(rocket.rocketStageEvents.Position);
+        rocket.stage1.OnStageUpdate += (StageModel model) => positions.Add(rocket.Position);
+        rocket.stage2.OnStageUpdate += (StageModel model) => positions.Add(rocket.Position);
+        rocket.stage3.OnStageUpdate += (StageModel model) => positions.Add(rocket.Position);
         rocket.stage3.OnStageEnd += (StageModel model) => SetPositions();
         
         rocket.rocketStateMachine.LaunchStateMachine();

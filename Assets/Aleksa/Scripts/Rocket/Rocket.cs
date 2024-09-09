@@ -5,7 +5,7 @@ public class Rocket : MonoBehaviour
     public RocketHandler rocketHandler;
 
     public RocketStateMachine rocketStateMachine;
-    public RocketStageEvents rocketStageEvents;
+    public RocketStageEventHandler rocketStageEventHandler;
     public FlightPathHistory flightPathHistory;
 
     public StageModel stage1;
@@ -19,6 +19,7 @@ public class Rocket : MonoBehaviour
 
     private Vector2 _initialPosition = Vector2.zero;
     private Quaternion _initialQuaternion = Quaternion.identity;
+    public Vector3 Position => transform.position;
 
     private void Awake()
     {
@@ -41,7 +42,7 @@ public class Rocket : MonoBehaviour
     public void Init()
     {
         rocketStateMachine.SetupStateMachine(this);
-        rocketStageEvents.Init(this);
+        rocketStageEventHandler.Init(this);
         
         stage1.OnStageEnd = model =>
         {
