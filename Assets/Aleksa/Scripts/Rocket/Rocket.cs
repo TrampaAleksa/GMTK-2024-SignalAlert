@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.Serialization;
 
 public class Rocket : MonoBehaviour
 {
@@ -11,16 +7,16 @@ public class Rocket : MonoBehaviour
     public RocketStateMachine rocketStateMachine;
     public RocketStageEvents rocketStageEvents;
     public FlightPathHistory flightPathHistory;
-    
+
     public StageModel stage1;
     public StageModel stage2;
     public StageModel stage3;
-    
+
     public float maxSpeed = 100f;
-    public float startAngle = 60f;  // Reference angle in degrees
+    public float startAngle = 60f; // Reference angle in degrees
     public float stage3TargetAngle = -60f;
-    public float stage3MinimumSpeed =2f;
-    
+    public float stage3MinimumSpeed = 2f;
+
     private Vector2 _initialPosition = Vector2.zero;
     private Quaternion _initialQuaternion = Quaternion.identity;
 
@@ -28,33 +24,34 @@ public class Rocket : MonoBehaviour
     {
         _initialPosition = transform.position;
         _initialQuaternion = transform.rotation;
-        RocketCollisionEvents.Instance.AddOnCollidedWithObstacle((r) => transform.position = _initialPosition);
-        RocketCollisionEvents.Instance.AddOnCollidedWithObstacle((r) => flightPathHistory.FinishRecording());
+        
+        RocketCollisionEvents.Instance.AddOnCollidedWithObstacle(r =>
+            transform.position = _initialPosition);
+        RocketCollisionEvents.Instance.AddOnCollidedWithObstacle(r =>
+            flightPathHistory.FinishRecording());
+        
         Init();
+    }
+
+    private void FixedUpdate()
+    {
+        rocketStateMachine.UpdateTime(Time.fixedDeltaTime); // handles stage start, update and end events
     }
 
     public void Init()
     {
         rocketStateMachine.SetupStateMachine(this);
-
-        stage1.OnStageStart = rocketStageEvents.Stage1Start;
-        stage2.OnStageStart = rocketStageEvents.Stage2Start;
-        stage3.OnStageStart = rocketStageEvents.Stage3Start;
-        stage1.OnStageUpdate = rocketStageEvents.Stage1Update;
-        stage2.OnStageUpdate = rocketStageEvents.Stage2Update;
-        stage3.OnStageUpdate = rocketStageEvents.Stage3Update;
-        stage1.OnStageEnd = rocketStageEvents.Stage1End;
-        stage1.OnStageEnd = (model) =>
+        rocketStageEvents.Init(this);
+        
+        stage1.OnStageEnd = model =>
         {
             rocketHandler.StopMotors();
             rocketHandler.StageChanged(RocketStage.Stage1);
         };
-        stage2.OnStageEnd = rocketStageEvents.Stage2End;
-        stage2.OnStageEnd = (model) => rocketHandler.StageChanged(RocketStage.Stage2);
-        stage3.OnStageEnd = rocketStageEvents.Stage3End;
+        stage2.OnStageEnd = model => rocketHandler.StageChanged(RocketStage.Stage2);
 
-        stage1.OnStageStart += (s) => flightPathHistory.StartRecording();
-        stage3.OnStageEnd += (s) => flightPathHistory.FinishRecording();
+        stage1.OnStageStart += s => flightPathHistory.StartRecording();
+        stage3.OnStageEnd += s => flightPathHistory.FinishRecording();
         stage3.OnStageEnd += ResetRocket;
 
         stage1.angleAtStageStart = startAngle;
@@ -71,27 +68,28 @@ public class Rocket : MonoBehaviour
         CameraHandler.Instance.ToggleFirstPerson(true);
         rocketHandler.StartMotorAndLaunch(rocketStateMachine.LaunchStateMachine);
     }
-    private void ResetRocket(StageModel m)=> rocketHandler.ResetRocket();
 
-    void FixedUpdate()
+    private void ResetRocket(StageModel m)
     {
-        rocketStateMachine.UpdateTime(Time.fixedDeltaTime); // handles stage start, update and end events
+        rocketHandler.ResetRocket();
     }
 
-    
+
     public float CalculateStageDuration(StageModel stage)
     {
-        float stageDuration = stage.GetStageDuration();
+        var stageDuration = stage.GetStageDuration();
         return stageDuration;
     }
+
     public float CalculateSpeed(StageModel stage)
     {
-        float stageSpeed = stage.CalculateSpeed(maxSpeed);
+        var stageSpeed = stage.CalculateSpeed(maxSpeed);
         return stageSpeed;
     }
+
     public Vector2 GetFlightDirection(StageModel stage)
     {
-        Vector2 flightDirection = stage.GetFlightDirection();
+        var flightDirection = stage.GetFlightDirection();
         return flightDirection;
     }
 

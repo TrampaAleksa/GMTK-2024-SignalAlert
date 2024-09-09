@@ -5,42 +5,56 @@ using UnityEngine.Serialization;
 public class RocketStageEvents : MonoBehaviour
 {
     [FormerlySerializedAs("rocketLaunch")] public Rocket rocket;
-    public Vector2 position;
+    public Vector2 Position { get; set; }
 
-    private float angleIncrement;
+    private StageModel stage1 => rocket.stage1;
+    private StageModel stage2 => rocket.stage2;
+    private StageModel stage3 => rocket.stage3;
 
-    private void Awake()
+    
+    public void Init(Rocket rocket)
     {
-        rocket = GetComponent<Rocket>();
+        this.rocket = rocket;
+
+        stage1.OnStageStart = Stage1Start;
+        stage2.OnStageStart = Stage2Start;
+        stage3.OnStageStart = Stage3Start;
+        stage1.OnStageUpdate = Stage1Update;
+        stage2.OnStageUpdate = Stage2Update;
+        stage3.OnStageUpdate = Stage3Update;
+        stage1.OnStageEnd = Stage1End;
+        stage2.OnStageEnd = Stage2End;
+        stage3.OnStageEnd = Stage3End;
     }
 
 
     private float _stage1Speed;
     
+    private float _angleIncrement;
     private float _stage1InitialAngle;
     private float _stage1Angle;
     private float _stage1TargetAngle;
     
     public void Stage1Start(StageModel stage)
     {
-        position = Vector2.zero;
+        Position = Vector2.zero;
         
         _stage1InitialAngle = stage.angleAtStageStart;
         _stage1Angle = _stage1InitialAngle;
         _stage1TargetAngle = stage.CalculateAdjustedAngle();
         
         float totalAngleDifference = Mathf.DeltaAngle(_stage1InitialAngle, _stage1TargetAngle);
-        angleIncrement = totalAngleDifference / stage.GetStageDuration();
+        _angleIncrement = totalAngleDifference / stage.GetStageDuration();
     }
     public void Stage1Update(StageModel stage)
     {
         Vector2 stageLaunchDirection = GetFlightDirection(_stage1Angle);
-        _stage1Angle += angleIncrement * Time.fixedDeltaTime;
+        _stage1Angle += _angleIncrement * Time.fixedDeltaTime;
         
         _stage1Speed = rocket.CalculateSpeed(stage);
         
-        position += stageLaunchDirection * (_stage1Speed * Time.fixedDeltaTime);
-        transform.position = position;
+        Position += stageLaunchDirection * (_stage1Speed * Time.fixedDeltaTime);
+        transform.position = Position;
         transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, -90f+_stage1Angle));
 
     }
@@ -64,17 +78,17 @@ public class RocketStageEvents : MonoBehaviour
         _stage2TargetAngle = stage.CalculateAdjustedAngle();
         
         float totalAngleDifference = Mathf.DeltaAngle(_stage2InitialAngle, _stage2TargetAngle);
-        angleIncrement = totalAngleDifference / stage.GetStageDuration();
+        _angleIncrement = totalAngleDifference / stage.GetStageDuration();
     }
     public void Stage2Update(StageModel stage)
     {
         Vector2 stageLaunchDirection = GetFlightDirection(_stage2Angle);
-        _stage2Angle += angleIncrement * Time.fixedDeltaTime;
+        _stage2Angle += _angleIncrement * Time.fixedDeltaTime;
         
         _stage2Speed = rocket.CalculateSpeed(stage) + _stage1Speed;
         
-        position += stageLaunchDirection * (_stage2Speed  * Time.fixedDeltaTime);
-        transform.position = position;
+        Position += stageLaunchDirection * (_stage2Speed  * Time.fixedDeltaTime);
+        transform.position = Position;
         transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, -90f+_stage2Angle));
     }
     public void Stage2End(StageModel stage)
@@ -113,17 +127,17 @@ public class RocketStageEvents : MonoBehaviour
         _stage3Angle = _stage3InitialAngle;
         
         float totalAngleDifference = Mathf.DeltaAngle(_stage3InitialAngle, rocket.stage3TargetAngle);
-        angleIncrement = totalAngleDifference / stage.GetStageDuration();
+        _angleIncrement = totalAngleDifference / stage.GetStageDuration();
     }
     public void Stage3Update(StageModel stage)
     {
         DecreaseSpeed(stage);
         
         Vector2 stageLaunchDirection = GetFlightDirection(_stage3Angle);
-        _stage3Angle += angleIncrement * Time.fixedDeltaTime;
+        _stage3Angle += _angleIncrement * Time.fixedDeltaTime;
         
-        position += stageLaunchDirection * (_currentStage3Speed * Time.fixedDeltaTime); 
-        transform.position = position;
+        Position += stageLaunchDirection * (_currentStage3Speed * Time.fixedDeltaTime); 
+        transform.position = Position;
         transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, -90f+_stage3Angle));
 
     }

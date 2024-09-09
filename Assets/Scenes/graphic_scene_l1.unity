@@ -10840,7 +10840,7 @@ MonoBehaviour:
   flightPathHistory: {fileID: 380045696}
   stage1:
     referenceStageMass: 1000
-    stageDurationAtReferenceMass: 7
+    stageDurationAtReferenceMass: 2
     engineForce: 400
     mass: 1000
     engines: 2
@@ -10848,7 +10848,7 @@ MonoBehaviour:
     size: 0
   stage2:
     referenceStageMass: 500
-    stageDurationAtReferenceMass: 8
+    stageDurationAtReferenceMass: 3
     engineForce: 500
     mass: 500
     engines: 2
@@ -10856,7 +10856,7 @@ MonoBehaviour:
     size: 0
   stage3:
     referenceStageMass: 5
-    stageDurationAtReferenceMass: 20
+    stageDurationAtReferenceMass: 5
     engineForce: 2000
     mass: 5
     engines: 1
