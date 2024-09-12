@@ -82,7 +82,13 @@ public class RSEv_ThirdStageFlight : RocketStageEvent
 
 public class RocketStageEvent
 {
-    public Rocket Rocket;
+    protected Rocket Rocket;
+
+    public RocketStageEvent InjectRocket(Rocket rocketToInject)
+    {
+        Rocket = rocketToInject;
+        return this;
+    }
     
     public virtual void StageStart(StageModel stage)
     {

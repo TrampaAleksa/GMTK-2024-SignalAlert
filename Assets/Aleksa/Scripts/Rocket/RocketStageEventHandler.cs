@@ -9,18 +9,26 @@ public class RocketStageEventHandler : MonoBehaviour
     private StageModel stage2 => rocket.stage2;
     private StageModel stage3 => rocket.stage3;
 
+    public RocketStageEvent firstStageEvents;
+
     
-    public void Init(Rocket rocket)
+    public void Init(Rocket rocketRef)
     {
-        this.rocket = rocket;
+        this.rocket = rocketRef;
+        firstStageEvents = new RSEv_FirstStageFlight().InjectRocket(rocketRef);
+
+        // stage1.OnStageStart = firstStageEvents.StageStart;
+        // stage1.OnStageUpdate = firstStageEvents.StageUpdate;
+        // stage1.OnStageEnd = firstStageEvents.StageEnd;
 
         stage1.OnStageStart = Stage1Start;
+        stage1.OnStageUpdate = Stage1Update;
+        stage1.OnStageEnd = Stage1End;
+        
         stage2.OnStageStart = Stage2Start;
         stage3.OnStageStart = Stage3Start;
-        stage1.OnStageUpdate = Stage1Update;
         stage2.OnStageUpdate = Stage2Update;
         stage3.OnStageUpdate = Stage3Update;
-        stage1.OnStageEnd = Stage1End;
         stage2.OnStageEnd = Stage2End;
         stage3.OnStageEnd = Stage3End;
     }
