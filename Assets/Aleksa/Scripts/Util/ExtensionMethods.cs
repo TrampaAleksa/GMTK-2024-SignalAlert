@@ -21,6 +21,11 @@ public static class ExtensionMethods
     /// <returns>The angle of the Transform's rotation around the Z-axis in degrees.</returns>
     public static float GetAngle(this Transform transform)
     {
-        return transform.eulerAngles.z;
+        float angle = transform.eulerAngles.z;
+    
+        if (angle > 180)
+            angle -= 360;
+
+        return angle;
     }
 }

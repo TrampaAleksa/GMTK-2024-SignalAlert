@@ -35,15 +35,14 @@ public class StageModel
         rocketSpeed = Mathf.Min(rocketSpeed, maxSpeed);
         return rocketSpeed;
     }
+    
+    // TODO -- Remove from stage model and use rocket's angle to calculate this value
     public float CalculateAdjustedAngle()
     {
         float adjustedAngle = angleAtStageStart * (referenceStageMass / mass);
         return adjustedAngle;
     }
     
-    public Vector2 GetFlightDirection() => new Vector2(Mathf.Cos(CalculateAdjustedAngle() * Mathf.Deg2Rad), Mathf.Sin(CalculateAdjustedAngle() * Mathf.Deg2Rad)).normalized;
-
-
     public static StageModel GetDefaultStage()
     {
         Debug.LogWarning("Using default stage model");

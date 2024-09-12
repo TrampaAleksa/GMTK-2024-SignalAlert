@@ -18,6 +18,11 @@ public class Rocket : MonoBehaviour
     public float stage3MinimumSpeed = 2f;
 
     public float CurrentSpeed { get; set; }
+    public float CurrentAngle
+    {
+        get => 90f + transform.GetAngle();
+        set => transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, -90f+value));
+    }
 
     private Vector2 _initialPosition = Vector2.zero;
     private Quaternion _initialQuaternion = Quaternion.identity;
@@ -88,12 +93,6 @@ public class Rocket : MonoBehaviour
     {
         var stageSpeed = stage.CalculateSpeed(maxSpeed);
         return stageSpeed;
-    }
-
-    public Vector2 GetFlightDirection(StageModel stage)
-    {
-        var flightDirection = stage.GetFlightDirection();
-        return flightDirection;
     }
 
     public float GetTotalDuration()
