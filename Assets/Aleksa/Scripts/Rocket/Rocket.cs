@@ -17,6 +17,8 @@ public class Rocket : MonoBehaviour
     public float stage3TargetAngle = -60f;
     public float stage3MinimumSpeed = 2f;
 
+    public float CurrentSpeed { get; set; }
+
     private Vector2 _initialPosition = Vector2.zero;
     private Quaternion _initialQuaternion = Quaternion.identity;
     public Vector3 Position => transform.position;
